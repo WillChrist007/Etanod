@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/donate"
+        android:title="Donate"
+        android:icon="@drawable/ic_donate"/>
+    <item
+        android:id="@+id/fundraising"
+        android:icon="@drawable/ic_fundraising"
+        android:title="Fundraising" />
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile"/>
+</menu>
