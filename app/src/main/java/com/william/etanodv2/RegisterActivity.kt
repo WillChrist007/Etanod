@@ -1,7 +1,9 @@
 package com.william.etanodv2
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,39 +12,39 @@ import android.widget.DatePicker
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputLayout
+import com.william.etanodv2.databinding.ActivityRegisterBinding
+import com.william.etanodv2.room.users.User
+import com.william.etanodv2.room.users.UserDB
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var inputUsername: TextInputLayout
-    private lateinit var inputPassword: TextInputLayout
-    private lateinit var inputEmail: TextInputLayout
-    private lateinit var inputTanggal: TextInputLayout
-    private lateinit var editTanggal : EditText
-    private lateinit var inputTelepon: TextInputLayout
     var kalender = Calendar.getInstance()
+
+    val dbUser by lazy { UserDB(this) }
+
+    private lateinit var binding: ActivityRegisterBinding
+
+    private val myPreference = "myPref"
+    private val usernameK = "usernameKey"
+    private val passwordK = "passwordKey"
+    var sharedPreferencesRegister: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+
         supportActionBar?.hide()
 
-        inputUsername = findViewById(R.id.username)
-        inputPassword = findViewById(R.id.password)
-        inputEmail = findViewById(R.id.email)
-        inputTanggal = findViewById(R.id.tanggal_lahir)
-        editTanggal =  findViewById(R.id.etTanggal)
-        inputTelepon = findViewById(R.id.tlp)
-        
-        val registerBtn: Button = findViewById(R.id.btnRegistration)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+
         val moveLogin = Intent(this, LoginActivity::class.java)
-        val regBundle = Bundle()
-        regBundle.putString("username", "")
-        regBundle.putString("password", "")
-        regBundle.putString("email", "")
-        regBundle.putString("tanggal", "")
-        regBundle.putString("telepon", "")
-        moveLogin.putExtra("register", regBundle)
+
+        sharedPreferencesRegister = getSharedPreferences(myPreference, Context.MODE_PRIVATE)
 
         val dateSetListener = object : DatePickerDialog.OnDateSetListener {
             override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
@@ -53,7 +55,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        editTanggal.setOnClickListener(object : View.OnClickListener{
+        binding?.etTanggal?.setOnClickListener(object : View.OnClickListener{
             override fun onClick(view: View) {
                 DatePickerDialog(this@RegisterActivity,
                     dateSetListener,
@@ -63,56 +65,59 @@ class RegisterActivity : AppCompatActivity() {
             }
         })
 
-        registerBtn.setOnClickListener (View.OnClickListener{
+        binding?.btnRegistration?.setOnClickListener (View.OnClickListener{
             var checkRegister = false
-            val username: String = inputUsername.getEditText()?.getText().toString()
-            val password: String = inputPassword.getEditText()?.getText().toString()
-            val email: String = inputEmail.getEditText()?.getText().toString()
-            val tanggal: String = inputTanggal.getEditText()?.getText().toString()
-            val telepon: String = inputTelepon.getEditText()?.getText().toString()
 
-            if(username.isEmpty()){
-                inputUsername.setError("Username Tidak Boleh Kosong")
+            val inputUsername: String = binding?.username?.getEditText()?.getText().toString()
+            val inputPassword: String = binding?.password?.getEditText()?.getText().toString()
+            val inputEmail: String = binding?.email?.getEditText()?.getText().toString()
+            val inputTanggal: String = binding?.tanggalLahir?.getEditText()?.getText().toString()
+            val inputTelepon: String = binding?.telepon?.getEditText()?.getText().toString()
+
+            if(inputUsername.isEmpty()){
+                binding?.username?.setError("Username Tidak Boleh Kosong")
                 checkRegister = false
             }
 
-            if(password.isEmpty()){
-                inputPassword.setError("Password Tidak Boleh Kosong")
+            if(inputPassword.isEmpty()){
+                binding?.password?.setError("Password Tidak Boleh Kosong")
                 checkRegister = false
             }
 
-
-            if(email.isEmpty()){
-                inputEmail.setError("Email Tidak Boleh Kosong")
+            if(inputEmail.isEmpty()){
+                binding?.email?.setError("Email Tidak Boleh Kosong")
                 checkRegister = false
             }
 
-            if(tanggal.isEmpty()){
-                inputTanggal.setError("Tanggal Lahir Tidak Boleh Kosong")
+            if(inputTanggal.isEmpty()){
+                binding?.tanggalLahir?.setError("Tanggal Lahir Tidak Boleh Kosong")
                 checkRegister = false
             }
 
-            if(telepon.isEmpty()){
-                inputTelepon.setError("Nomor Telepon Tidak Boleh Kosong")
+            if(inputTelepon.isEmpty()){
+                binding?.telepon?.setError("No Tlp Tidak Boleh Kosong")
                 checkRegister = false
-            }else if(telepon.length < 12){
-                inputTelepon.setError("Nomor Telepon Tidak valid (12 digit)")
+            }else if(inputTelepon.length < 12){
+                binding?.telepon?.setError("Panjang No Tlp harus > 12")
                 checkRegister = false
             }
 
-            if(!username.isEmpty() && !password.isEmpty() && !email.isEmpty() && !tanggal.isEmpty() && !telepon.isEmpty() && telepon.length == 12){
+            if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length == 12){
                 checkRegister = true
-                regBundle.putString("username", username)
-                regBundle.putString("password", password)
-                regBundle.putString("email", email)
-                regBundle.putString("tanggal", tanggal)
-                regBundle.putString("telepon", telepon)
-                moveLogin.putExtra("register", regBundle)
-                val builder: AlertDialog.Builder = AlertDialog.Builder(this@RegisterActivity)
-                builder.setTitle("Berhasil")
-                builder.setMessage("Akun Anda Berhasil Dibuat!")
-                    .setPositiveButton("oke"){ dialog, which -> }
-                    .show()
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    dbUser.userDao().addUser(
+                        User(0, inputEmail, inputUsername, inputPassword, inputTanggal, inputTelepon)
+                    )
+                    finish()
+                }
+
+                var strUserName: String = binding.username.editText?.text.toString().trim()
+                var strPass: String = binding.password.editText?.text.toString().trim()
+                val editor: SharedPreferences.Editor = sharedPreferencesRegister!!.edit()
+                editor.putString(usernameK, strUserName)
+                editor.putString(passwordK, strPass)
+                editor.apply()
             }
 
             if(!checkRegister)return@OnClickListener
@@ -124,6 +129,7 @@ class RegisterActivity : AppCompatActivity() {
         val dateFormat = "MM/dd/yyyy"
         val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
         temp = simpleDateFormat.format(kalender.getTime())
-        inputTanggal.getEditText()?.setText(temp)
+        binding?.tanggalLahir?.getEditText()?.setText(temp)
     }
+
 }

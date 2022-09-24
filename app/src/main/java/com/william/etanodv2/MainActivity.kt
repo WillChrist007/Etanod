@@ -16,11 +16,8 @@ class MainActivity : AppCompatActivity() {
         val RegisterBtn: Button = findViewById(R.id.selector_Register)
 
         loginBtn.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this@MainActivity)
-            builder.setTitle("Akun Belum Dibuat")
-            builder.setMessage("Silahkan Buat Akun terlebih Dahulu!")
-                .setPositiveButton("oke"){ dialog, which -> }
-                .show()
+            val moveRegister = Intent(this@MainActivity, LoginActivity::class.java)
+            startActivity(moveRegister)
         }
 
         RegisterBtn.setOnClickListener {
