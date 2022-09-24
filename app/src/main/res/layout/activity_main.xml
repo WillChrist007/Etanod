@@ -32,7 +32,7 @@
         app:layout_constraintVertical_bias="0.73">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/selector_login"
+            android:id="@+id/btnLogin"
             style="@style/Widget.Material3.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/selector_Register"
+            android:id="@+id/btnRegister"
             style="@style/Widget.Material3.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

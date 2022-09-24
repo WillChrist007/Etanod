@@ -3,26 +3,23 @@ package com.william.etanodv2
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import androidx.appcompat.app.AlertDialog
+import com.william.etanodv2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    var binding : ActivityMainBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         supportActionBar?.hide()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
 
-        val loginBtn: Button = findViewById(R.id.selector_login)
-        val RegisterBtn: Button = findViewById(R.id.selector_Register)
-
-        loginBtn.setOnClickListener {
-            val moveRegister = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(moveRegister)
+        binding?.btnLogin?.setOnClickListener {
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
         }
 
-        RegisterBtn.setOnClickListener {
-            val moveRegister = Intent(this@MainActivity, RegisterActivity::class.java)
-            startActivity(moveRegister)
+        binding?.btnRegister?.setOnClickListener {
+            startActivity(Intent(this@MainActivity, RegisterActivity::class.java))
         }
     }
 }

@@ -6,8 +6,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+import android.widget.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputLayout
@@ -37,13 +36,13 @@ class LoginActivity : AppCompatActivity() {
 
         inputUsername = findViewById(R.id.username)
         inputPassword = findViewById(R.id.password)
-        val btnLogin_click: Button = findViewById(R.id.btnLogin)
+        val btnLogin: Button = findViewById(R.id.btnLogin)
 
         getBundle()
         tempUsername=""
         tempPassword=""
-        
-        btnLogin_click.setOnClickListener (View.OnClickListener {
+
+        btnLogin.setOnClickListener (View.OnClickListener {
             var cekLogin = false
 
             getPembanding(inputUsername.editText?.text.toString())
@@ -78,8 +77,8 @@ class LoginActivity : AppCompatActivity() {
                     .show()
             }
             if(!cekLogin)return@OnClickListener
-            val moveHomer = Intent(this@LoginActivity, HomeActivity::class.java)
-            startActivity(moveHomer)
+            val moveHome = Intent(this@LoginActivity, HomeActivity::class.java)
+            startActivity(moveHome)
         })
     }
 

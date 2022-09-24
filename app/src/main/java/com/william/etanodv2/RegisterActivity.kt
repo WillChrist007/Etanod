@@ -7,11 +7,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.DatePicker
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.textfield.TextInputLayout
 import com.william.etanodv2.databinding.ActivityRegisterBinding
 import com.william.etanodv2.room.users.User
 import com.william.etanodv2.room.users.UserDB
