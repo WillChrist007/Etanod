@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         btnLogin.setOnClickListener (View.OnClickListener {
             var cekLogin = false
 
-            getPembanding(inputUsername.editText?.text.toString())
+            getTemp(inputUsername.editText?.text.toString())
 
             val username: String = inputUsername.getEditText()?.getText().toString()
             val password: String = inputPassword.getEditText()?.getText().toString()
@@ -93,13 +93,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun getPembanding(value: String){
+    fun getTemp(str: String){
         CoroutineScope(Dispatchers.Main).launch {
-            val user = dbUser.userDao().getUser(value)[0]
+            val user = dbUser.userDao().getUser(str)[0]
             tempUsername = user.username
             tempPassword = user.password
             Toast.makeText(applicationContext, user.username, Toast.LENGTH_SHORT).show()
-        }
-
-    }
+        }}
 }

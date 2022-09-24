@@ -4,48 +4,30 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import java.lang.Boolean
 
 class SplashScreenActivity : AppCompatActivity() {
-    lateinit var splashScreen: RelativeLayout
-    var prevStarted = "yes"
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_splash_screen)
+        supportActionBar?.hide()
 
-    override fun onResume() {
-        super.onResume()
-
-        val sharedpreferences = getSharedPreferences("Etanod", Context.MODE_PRIVATE)
-        if (!sharedpreferences.getBoolean(prevStarted, false)) {
-            val editor = sharedpreferences.edit()
-            editor.putBoolean(prevStarted, Boolean.TRUE)
+        val prefs = getSharedPreferences("splash_screen_prefernce", MODE_PRIVATE)
+        if (!prefs.getBoolean("bypass_boolean", false)) {
+            val editor = getSharedPreferences("splash_screen_prefernce", MODE_PRIVATE).edit()
+            editor.putBoolean("bypass_boolean", true)
             editor.apply()
-            val splashScreen = findViewById<RelativeLayout>(R.id.splash_screen)
+            Handler(Looper.getMainLooper()).postDelayed({
+                startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+            },3000)
         }else{
-            moveToSecondary()
+            startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+            finish()
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        supportActionBar?.hide()
-        setContentView(R.layout.activity_splash_screen)
-
-        val handler = Handler()
-        handler.postDelayed(Runnable {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
-            finish()
-        }, 3000L)
-    }
-
-    fun moveToSecondary() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
 }

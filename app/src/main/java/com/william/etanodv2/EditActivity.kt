@@ -56,7 +56,7 @@ class EditActivity : AppCompatActivity() {
         button_update.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 dbItem.itemDao().updateItem(
-                    Item(0,edit_judul.text.toString(),
+                    Item(itemId,edit_judul.text.toString(),
                         edit_jumlah.text.toString(),
                         edit_durasi.text.toString())
                 )

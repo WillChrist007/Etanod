@@ -17,21 +17,21 @@ class EditProfileActivity : AppCompatActivity() {
     lateinit var tempPassword: String
     lateinit var tempTanggal: String
     var tempId: Int = 0
-    var data_kliriman: Int = 0
+    var dataUser: Int = 0
 
     val dbUser by lazy { UserDB(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_edit_profile)
+
         supportActionBar?.setTitle("Editing Profile")
 
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
         tempUsername = ""
-        tempPassword=""
-        tempTanggal=""
+        tempPassword = ""
+        tempTanggal = ""
         setupView()
         setupListenerEditUser()
 
@@ -61,9 +61,9 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     fun getUser(){
-        data_kliriman = intent.getIntExtra("intent_id", 0)
+        dataUser = intent.getIntExtra("intent_id", 0)
         CoroutineScope(Dispatchers.Main).launch {
-            val user = dbUser.userDao().getUser2(data_kliriman)[0]
+            val user = dbUser.userDao().getUser2(dataUser)[0]
             binding.email.editText?.setText(user.email)
             binding.username.editText?.setText(user.username)
             binding.telepon.editText?.setText(user.telepon)
