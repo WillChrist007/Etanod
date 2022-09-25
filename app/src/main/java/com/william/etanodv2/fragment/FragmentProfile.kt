@@ -62,7 +62,7 @@ class FragmentProfile : Fragment() {
             println("hasil=" + resultCheckUser)
             viewUsername.setText("Username : " + resultCheckUser[0].username)
             viewEmail.setText("Email : " + resultCheckUser[0].email)
-            viewTelepon.setText("Phone number : " + resultCheckUser[0].telepon)
+            viewTelepon.setText("Telepon : " + resultCheckUser[0].telepon)
 
         }
 
