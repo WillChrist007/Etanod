@@ -103,7 +103,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     dbUser.userDao().addUser(
-                        User(0, inputEmail, inputUsername, inputPassword, inputTanggal, inputTelepon)
+                        User(0, inputUsername, inputPassword, inputEmail, inputTanggal, inputTelepon)
                     )
                     finish()
                 }
