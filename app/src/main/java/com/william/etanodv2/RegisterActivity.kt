@@ -91,14 +91,14 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             if(inputTelepon.isEmpty()){
-                binding?.telepon?.setError("No Tlp Tidak Boleh Kosong")
+                binding?.telepon?.setError("Nomor Telepon Tidak Boleh Kosong")
                 checkRegister = false
             }else if(inputTelepon.length < 12){
-                binding?.telepon?.setError("Panjang No Tlp harus > 12")
+                binding?.telepon?.setError("Nomor Telepon TIdak Valid")
                 checkRegister = false
             }
 
-            if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length == 12){
+            if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12){
                 checkRegister = true
 
                 CoroutineScope(Dispatchers.IO).launch {

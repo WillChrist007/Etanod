@@ -9,7 +9,10 @@ import android.view.View
 import android.widget.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.william.etanodv2.room.users.User
 import com.william.etanodv2.room.users.UserDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +22,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var inputUsername: TextInputLayout
     private lateinit var inputPassword: TextInputLayout
 
-    lateinit var tempUsername: String
-    lateinit var tempPassword: String
+    private lateinit var btnLogin: Button
+
+    private lateinit var mainLayout: ConstraintLayout
 
     val dbUser by lazy { UserDB(this) }
 
@@ -34,18 +38,17 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         supportActionBar?.hide()
 
+        mainLayout = findViewById(R.id.mainLayout)
+
         inputUsername = findViewById(R.id.username)
         inputPassword = findViewById(R.id.password)
-        val btnLogin: Button = findViewById(R.id.btnLogin)
+        btnLogin = findViewById(R.id.btnLogin)
 
         getBundle()
-        tempUsername=""
-        tempPassword=""
+
 
         btnLogin.setOnClickListener (View.OnClickListener {
             var cekLogin = false
-
-            getTemp(inputUsername.editText?.text.toString())
 
             val username: String = inputUsername.getEditText()?.getText().toString()
             val password: String = inputPassword.getEditText()?.getText().toString()
@@ -60,25 +63,30 @@ class LoginActivity : AppCompatActivity() {
                 cekLogin = false
             }
 
-            if(username == tempUsername && password == tempPassword){
-                cekLogin = true
-                var cekUsername: String = tempUsername
-                var cekPassword: String = tempPassword
-                val editor: SharedPreferences.Editor = sharedPreferencesRegister!!.edit()
-                editor.putString(usernameK, cekUsername)
-                editor.putString(passwordK, cekPassword)
-                editor.apply()
-            }else{
-                val builder: AlertDialog.Builder = AlertDialog.Builder(this@LoginActivity)
-                builder.setTitle("USername atau Password Salah")
-                builder.setMessage("Silahakan Isi Username dan Password Dengan Benar!")
-                    .setPositiveButton("Yes"){ dialog, which ->
-                    }
-                    .show()
+            CoroutineScope(Dispatchers.IO).launch {
+                var resultCheckUser: List<User> = dbUser.userDao().checkUser(username,password)
+                println("hasil: " + resultCheckUser)
+
+                if(resultCheckUser.isNullOrEmpty()){
+                    Snackbar.make(mainLayout,"Username atau Password Salah!", Snackbar.LENGTH_LONG).show()
+                    return@launch
+                }
+
+                if(resultCheckUser[0].username.equals(username) && resultCheckUser[0].password.equals(password)){
+                    cekLogin=true
+                    val intent=Intent(this@LoginActivity, HomeActivity::class.java)
+                    intent.putExtra("usernameLogin",username)
+                    intent.putExtra("idLogin",resultCheckUser[0].id)
+
+
+                    val editor: SharedPreferences.Editor= sharedPreferencesRegister!!.edit()
+                    editor.putString(usernameK,username)
+                    editor.putString(passwordK,password)
+                    editor.apply()
+
+                    startActivity(intent)
+                }
             }
-            if(!cekLogin)return@OnClickListener
-            val moveHome = Intent(this@LoginActivity, HomeActivity::class.java)
-            startActivity(moveHome)
         })
     }
 
@@ -93,11 +101,4 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun getTemp(str: String){
-        CoroutineScope(Dispatchers.Main).launch {
-            val user = dbUser.userDao().getUser(str)[0]
-            tempUsername = user.username
-            tempPassword = user.password
-            Toast.makeText(applicationContext, user.username, Toast.LENGTH_SHORT).show()
-        }}
 }

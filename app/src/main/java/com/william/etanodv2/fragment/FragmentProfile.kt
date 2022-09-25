@@ -1,6 +1,7 @@
 package com.william.etanodv2.fragment
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,98 +10,84 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.william.etanodv2.EditProfileActivity
 import com.william.etanodv2.MainActivity
 import com.william.etanodv2.R
+import com.william.etanodv2.databinding.ActivityHomeBinding
 import com.william.etanodv2.databinding.FragmentProfileBinding
+import com.william.etanodv2.room.users.User
 import com.william.etanodv2.room.users.UserDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FragmentProfile : Fragment() {
-    val dbUser by lazy { UserDB(requireActivity()) }
+    val dbUser by lazy { UserDB(requireContext()) }
 
-    private var _binding: FragmentProfileBinding? = null
+    lateinit var viewUsername: TextView
+    lateinit var viewEmail: TextView
+    lateinit var viewTelepon: TextView
 
-    private val binding get() = _binding!!
-    var tampilUsername: String? = null
-    var tampilPassword: String? = null
-    var tempId: Int = 0
+    lateinit var btnLogout:Button
+    lateinit var btnUpdate:Button
 
-    private val myPreference = "myPref"
-    private val usernameK = "usernameKey"
-    private val passK = "passKey"
-    var sharedPreferencesProfile: SharedPreferences? = null
+    var binding: ActivityHomeBinding? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getspData()
-        getProfileData(tampilUsername.toString())
+        viewUsername=view.findViewById(R.id.profileUsername)
+        viewEmail=view.findViewById(R.id.profileEmail)
+        viewTelepon=view.findViewById(R.id.profileTelepon)
 
-        binding.btnLogout.setOnClickListener{
-            logout()
+        btnUpdate=view.findViewById(R.id.btnEdit)
+        btnLogout=view.findViewById(R.id.btnLogout)
+
+        val userId= requireActivity().intent.getIntExtra("idLogin",0)
+        CoroutineScope(Dispatchers.IO).launch{
+
+            println("user id=" + userId)
+            val resultCheckUser: List<User> = dbUser.userDao().getUser(userId)
+            println("hasil=" + resultCheckUser)
+            viewUsername.setText("Username : " + resultCheckUser[0].username)
+            viewEmail.setText("Email : " + resultCheckUser[0].email)
+            viewTelepon.setText("Phone number : " + resultCheckUser[0].telepon)
+
         }
 
-        binding.btnEdit.setOnClickListener{
-            intentEdit(tempId, 2)
+         val tempId = userId
+
+        btnUpdate.setOnClickListener {
+            startActivity(
+                Intent(requireActivity().applicationContext, EditProfileActivity::class.java)
+                    .putExtra("intent_id", tempId)
+                    .putExtra("intent_type", 2)
+            )
+        }
+
+        btnLogout.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+            builder.setTitle("Log Out")
+            builder.setMessage("Are you sure want to exit?")
+                .setPositiveButton("Yes"){ dialog, which ->
+                    val moveMain = Intent(activity, MainActivity::class.java)
+                    startActivity(moveMain)
+                    Toast.makeText(activity, "Anda Berhasil Logout!", Toast.LENGTH_SHORT).show()
+                    activity?.finish()
+                    requireActivity().finishAndRemoveTask()
+                }
+                .show()
         }
     }
-
-    fun getspData(){
-        sharedPreferencesProfile = this.getActivity()?.getSharedPreferences(myPreference, Context.MODE_PRIVATE)
-        if (sharedPreferencesProfile!!.contains(usernameK)){
-            tampilUsername = sharedPreferencesProfile!!.getString(usernameK, "")
-        }
-        if (sharedPreferencesProfile!!.contains(passK)){
-            tampilPassword = sharedPreferencesProfile!!.getString(passK, "")
-        }
-    }
-
-    private fun getProfileData(str: String){
-        CoroutineScope(Dispatchers.Main).launch {
-            val user = dbUser.userDao().getUser(str)[0]
-            binding.profileUsername.setText(user.username)
-            binding.profileEmail.setText(user.email)
-            binding.profileTelepon.setText(user.telepon)
-            tempId = user.id
-        }
-    }
-
-    private fun logout(){
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle("Log Out")
-        builder.setMessage("Are you sure want to exit?")
-            .setPositiveButton("Yes"){ dialog, which ->
-                requireActivity().finishAndRemoveTask()
-            }
-            .show()
-    }
-
-    fun intentEdit(id_input: Int, intentType: Int){
-        startActivity(
-            Intent(requireActivity().applicationContext, EditProfileActivity::class.java)
-                .putExtra("intent_id", id_input)
-                .putExtra("intent_type", intentType)
-        )
-    }
-
 }
