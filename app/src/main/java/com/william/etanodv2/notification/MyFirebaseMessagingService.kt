@@ -38,7 +38,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             .setContentIntent(pendingIntent)
 
         //version OS is oreo, so notification channel is needed
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if(Build.VERSION.SDK_INT  >= Build.VERSION_CODES.O){
             val channel = NotificationChannel(channelId, "Notification Title", NotificationManager.IMPORTANCE_HIGH)
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
