@@ -6,11 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.FragmentProfile">
 
+
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="414dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="60dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:padding="20dp"
@@ -74,7 +76,6 @@
         style="@style/Widget.Material3.Button"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Logout"
         android:textColor="@color/white"
         android:textSize="18dp"
@@ -98,7 +99,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.8" />
+
+    <Button
+        android:id="@+id/dummy"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="top|center"
+        android:text="PROFILE"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

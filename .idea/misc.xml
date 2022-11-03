@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_baseline_qr_code_scanner_24.xml" value="0.156" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_delete.xml" value="0.189" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_done_all.xml" value="0.193" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_notifications.xml" value="0.193" />
@@ -12,8 +13,10 @@
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_login.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_main.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_register.xml" value="0.259375" />
+        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_scan_qractivity.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/adapter_item.xml" value="0.259375" />
-        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_fundraising.xml" value="0.259375" />
+        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_donate.xml" value="0.259375" />
+        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_fundraising.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/item_adapter.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/rv_item_donate.xml" value="0.259375" />
