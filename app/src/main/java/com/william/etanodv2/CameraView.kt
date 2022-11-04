@@ -1,4 +1,4 @@
-package com.william.etanodv2.room
+package com.william.etanodv2
 
 import android.content.Context
 import android.hardware.Camera
