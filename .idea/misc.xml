@@ -3,7 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_baseline_qr_code_scanner_24.xml" value="0.156" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_delete.xml" value="0.189" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_done_all.xml" value="0.193" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/drawable/ic_notifications.xml" value="0.193" />
@@ -13,10 +12,8 @@
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_login.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_main.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_register.xml" value="0.259375" />
-        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/activity_scan_qractivity.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/adapter_item.xml" value="0.259375" />
-        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_donate.xml" value="0.259375" />
-        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_fundraising.xml" value="0.2" />
+        <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_fundraising.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/item_adapter.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Etanod/app/src/main/res/layout/rv_item_donate.xml" value="0.259375" />
@@ -42,6 +39,25 @@
         <entry key="..\:/AndroidStudio/Modul2/EtanodV22/app/src/main/res/layout/fragment_fundraising.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Modul2/EtanodV22/app/src/main/res/layout/fragment_profile.xml" value="0.259375" />
         <entry key="..\:/AndroidStudio/Modul2/EtanodV22/app/src/main/res/menu/bottom_navigation.xml" value="0.264" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/drawable/bg_circle.xml" value="0.1" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/drawable/bg_rounded_rect.xml" value="0.1" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/drawable/bg_triangle.xml" value="0.1" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.1" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_edit.xml" value="0.2713541666666667" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_edit_profile.xml" value="0.2713541666666667" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_home.xml" value="0.27447916666666666" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_location.xml" value="0.264" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_login.xml" value="0.27447916666666666" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_register.xml" value="0.27447916666666666" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_scan_qractivity.xml" value="0.27447916666666666" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/activity_splash_screen.xml" value="0.27447916666666666" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/adapter_item.xml" value="0.27447916666666666" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/fragment_donate.xml" value="0.2713541666666667" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/fragment_fundraising.xml" value="0.2713541666666667" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/fragment_profile.xml" value="0.27447916666666666" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/layout/layout_tooltip.xml" value="0.13518518518518519" />
+        <entry key="..\:/DOCUMENTS/KULIAH/SEMESTER 5/PEMROGRAMAN BERBASIS PLATFORM/PRAKTEK/MINGGU 6/Etanod/app/src/main/res/menu/bottom_navigation.xml" value="0.27447916666666666" />
       </map>
     </option>
   </component>

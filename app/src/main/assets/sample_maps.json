@@ -1,0 +1,35 @@
+{
+  "result": [
+    {
+      "geometry": {
+        "location": {
+          "lat": -7.779433,
+          "lng": 110.415782
+        }
+      },
+      "name": "Bantuan bagi Bencana Alam Konoha",
+      "vicinity": "Jl. Babarsari No.43, Janti, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": -7.760014,
+          "lng": 110.398056
+        }
+      },
+      "name": "Donasi Untuk Panti Asuhan",
+      "vicinity": "Jl. Lobby Hartono Mall, Kaliwaru, Condongcatur, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": -7.757460,
+          "lng": 110.417874
+        }
+      },
+      "name": "Galang Dana Bagi Orang Cacat",
+      "vicinity": "Jenengan, Maguwoharjo, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta"
+    }
+  ],
+  "status": "OK"
+}

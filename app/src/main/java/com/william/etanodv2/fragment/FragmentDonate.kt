@@ -10,10 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.william.etanodv2.EditProfileActivity
-import com.william.etanodv2.R
-import com.william.etanodv2.RVDonasiAdapter
-import com.william.etanodv2.ScanQRActivity
+import com.william.etanodv2.*
 import com.william.etanodv2.entity.donate
 import com.william.etanodv2.room.Constant
 import kotlinx.android.synthetic.main.fragment_donate.*
@@ -47,6 +44,11 @@ class FragmentDonate : Fragment() {
         imgScan.setOnClickListener {
             startActivity(
                 Intent(requireActivity().applicationContext, ScanQRActivity::class.java)
+            )
+        }
+        imgMap.setOnClickListener {
+            startActivity(
+                Intent(requireActivity().applicationContext, LocationActivity::class.java)
             )
         }
     }
