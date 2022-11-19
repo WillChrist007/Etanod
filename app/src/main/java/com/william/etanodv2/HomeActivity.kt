@@ -1,16 +1,15 @@
 package com.william.etanodv2
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.william.etanodv2.fragment.FragmentHome
-import com.william.etanodv2.fragment.FragmentScanner
 import com.william.etanodv2.fragment.FragmentProfile
 
 class HomeActivity : AppCompatActivity() {
     private val homeFragment = FragmentHome()
-    private val scannerFragment = FragmentScanner()
     private val profileFragment = FragmentProfile()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
         bottom.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.home -> replaceFragment(homeFragment)
-                R.id.scanner->replaceFragment(scannerFragment)
+                R.id.scanner->startActivity(Intent(this@HomeActivity, ScanQRActivity::class.java))
                 R.id.profile->replaceFragment(profileFragment)
             }
             true
