@@ -7,8 +7,6 @@ import com.william.etanodv2.databinding.ActivityEditProfileBinding
 import com.william.etanodv2.room.Constant
 import com.william.etanodv2.room.users.User
 import com.william.etanodv2.room.users.UserDB
-import kotlinx.android.synthetic.main.activity_edit.*
-import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

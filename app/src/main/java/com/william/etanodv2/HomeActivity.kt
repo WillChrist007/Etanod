@@ -2,16 +2,15 @@ package com.william.etanodv2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.william.etanodv2.fragment.FragmentDonate
-import com.william.etanodv2.fragment.FragmentFundraising
+import com.william.etanodv2.fragment.FragmentHome
+import com.william.etanodv2.fragment.FragmentScanner
 import com.william.etanodv2.fragment.FragmentProfile
 
 class HomeActivity : AppCompatActivity() {
-    private val donateFragment = FragmentDonate()
-    private val fundraisingFragment = FragmentFundraising()
+    private val homeFragment = FragmentHome()
+    private val scannerFragment = FragmentScanner()
     private val profileFragment = FragmentProfile()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,12 +18,12 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         supportActionBar?.hide()
 
-        replaceFragment(donateFragment)
+        replaceFragment(homeFragment)
         val bottom: BottomNavigationView = findViewById(R.id.select_menu)
         bottom.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.donate -> replaceFragment(donateFragment)
-                R.id.fundraising->replaceFragment(fundraisingFragment)
+                R.id.home -> replaceFragment(homeFragment)
+                R.id.scanner->replaceFragment(scannerFragment)
                 R.id.profile->replaceFragment(profileFragment)
             }
             true

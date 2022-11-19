@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/donate"
-        android:title="Donate"
-        android:icon="@drawable/ic_donate"/>
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
     <item
-        android:id="@+id/fundraising"
-        android:icon="@drawable/ic_fundraising"
-        android:title="Fundraising" />
+        android:id="@+id/scanner"
+        android:icon="@drawable/ic_baseline_qr_code_scanner_24"
+        android:title="QR Scanner" />
     <item
         android:id="@+id/profile"
         android:title="Profile"
