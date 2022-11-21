@@ -63,6 +63,11 @@ class LoginActivity : AppCompatActivity() {
                 cekLogin = false
             }
 
+            if(username == "admin" && password == "admin") {
+                val intent=Intent(this@LoginActivity, UserActivity::class.java)
+                startActivity(intent)
+            }
+
             CoroutineScope(Dispatchers.IO).launch {
                 var resultCheckUser: List<User> = dbUser.userDao().checkUser(username,password)
                 println("hasil: " + resultCheckUser)
@@ -86,6 +91,8 @@ class LoginActivity : AppCompatActivity() {
 
                     startActivity(intent)
                 }
+
+
             }
         })
     }

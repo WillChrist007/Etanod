@@ -2,112 +2,242 @@ package com.william.etanodv2
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.william.etanodv2.databinding.ActivityEditProfileBinding
-import com.william.etanodv2.room.Constant
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import com.william.etanodv2.api.UserApi
+import com.william.etanodv2.models.User1
 import com.william.etanodv2.room.users.User
 import com.william.etanodv2.room.users.UserDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 class EditProfileActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityEditProfileBinding
-    lateinit var tempUsername: String
-    lateinit var tempPassword: String
-
-    var tempId: Int = 0
-    var dataUser: Int = 0
+    private var etEditUsername: EditText? = null
+    private var etEditPassword: EditText? = null
+    private var etEditEmail: EditText? = null
+    private var etEditTanggal: EditText? = null
+    private var etEditTelepon: EditText? = null
+    private var layoutLoading: LinearLayout? = null
+    private var queue: RequestQueue? = null
 
     val dbUser by lazy { UserDB(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_edit_profile)
 
-        supportActionBar?.setTitle("Edit Profile")
+        queue = Volley.newRequestQueue(this)
+        etEditUsername = findViewById(R.id.edit_username)
+        etEditPassword = findViewById(R.id.edit_password)
+        etEditEmail = findViewById(R.id.edit_email)
+        etEditTanggal = findViewById(R.id.edit_tanggal)
+        etEditTelepon = findViewById(R.id.edit_telepon)
+        layoutLoading = findViewById(R.id.layout_loading)
 
-        binding = ActivityEditProfileBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-        tempUsername = ""
-        tempPassword = ""
-        setupView()
+        val btnSave = findViewById<Button>(R.id.btnSave)
+        val id = intent.getLongExtra("id", -1)
+        if(id==-1L) {
+            btnSave.setOnClickListener { createUser() }
+        } else {
+            getUserById(id)
 
-        binding.btnSave.setOnClickListener{
-            val inputUsername: String = binding?.editUsername?.getEditText()?.getText().toString()
-            val inputPassword: String = binding?.editPassword?.getEditText()?.getText().toString()
-            val inputEmail: String = binding?.editEmail?.getEditText()?.getText().toString()
-            val inputTanggal: String = binding?.editTanggal?.getEditText()?.getText().toString()
-            val inputTelepon: String = binding?.editTelepon?.getEditText()?.getText().toString()
-
-            if(inputUsername.isEmpty()){
-                binding?.editTanggal?.setError("Username Tidak Boleh Kosong")
-            }
-
-            if(inputPassword.isEmpty()){
-                binding?.editPassword?.setError("Password Tidak Boleh Kosong")
-            }
-
-            if(inputEmail.isEmpty()){
-                binding?.editEmail?.setError("Email Tidak Boleh Kosong")
-            }
-
-            if(inputTanggal.isEmpty()){
-                binding?.editTanggal?.setError("Tanggal Lahir Tidak Boleh Kosong")
-            }
-
-            if(inputTelepon.isEmpty()){
-                binding?.editTelepon?.setError("Nomor Telepon Tidak Boleh Kosong")
-            }else if(inputTelepon.length < 12){
-                binding?.editTelepon?.setError("Nomor Telepon TIdak Valid")
-            }
-
-            if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12) {
+            btnSave.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     dbUser.userDao().updateUser(
                         User(
-                            tempId,
-                            binding.editUsername.editText?.text.toString(),
-                            binding.editPassword.editText?.text.toString(),
-                            binding.editEmail.editText?.text.toString(),
-                            binding.editTanggal.editText?.text.toString(),
-                            binding.editTelepon.editText?.text.toString()
+                            id, etEditUsername.toString(), etEditPassword.toString(),
+                            etEditEmail.toString(), etEditTanggal.toString(),
+                            etEditTelepon.toString()
                         )
                     )
-                    finish()
-                    val intent= Intent(this@EditProfileActivity, HomeActivity::class.java)
-                    startActivity(intent)
+                }
+                updateUser(id)
+            }
+        }
+
+    }
+
+    private fun getUserById(id: Long) {
+        setLoading(true)
+        val stringRequest: StringRequest = object :
+            StringRequest(Method.GET, UserApi.GET_BY_ID_URL + id, Response.Listener { response ->
+                val gson = Gson()
+                val user = gson.fromJson(response, User1::class.java)
+
+                etEditUsername!!.setText(user.username)
+                etEditPassword!!.setText(user.password)
+                etEditEmail!!.setText(user.email)
+                etEditTanggal!!.setText(user.tanggalLahir)
+                etEditTelepon!!.setText(user.telepon)
+
+                Toast.makeText(this@EditProfileActivity, "Data berhasil diambil!", Toast.LENGTH_SHORT).show()
+                setLoading(false)
+            }, Response.ErrorListener { error ->
+                setLoading(false)
+
+                try {
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        this@EditProfileActivity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (e: Exception) {
+                    Toast.makeText(this@EditProfileActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                return headers
+            }
+        }
+        queue!!.add(stringRequest)
+    }
+
+    private fun createUser(){
+        setLoading(true)
+
+        val user = User1(
+            etEditUsername!!.text.toString(),
+            etEditPassword!!.text.toString(),
+            etEditEmail!!.text.toString(),
+            etEditTanggal!!.text.toString(),
+            etEditTelepon!!.text.toString()
+        )
+
+        val stringRequest: StringRequest =
+            object : StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
+                val gson = Gson()
+                var user = gson.fromJson(response, User1::class.java)
+
+                if(user != null)
+                    Toast.makeText(this@EditProfileActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
+
+                val returnIntent = Intent()
+                setResult(RESULT_OK, returnIntent)
+                finish()
+
+                setLoading(false)
+            }, Response.ErrorListener { error ->
+                setLoading(false)
+                try {
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        this@EditProfileActivity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (e: Exception){
+                    Toast.makeText(this@EditProfileActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }) {
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): Map<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["Accept"] = "application/json"
+                    return headers
+                }
+
+                @Throws(AuthFailureError::class)
+                override fun getBody(): ByteArray {
+                    val gson = Gson()
+                    val requestBody = gson.toJson(user)
+                    return requestBody.toByteArray(StandardCharsets.UTF_8)
+                }
+
+                override fun getBodyContentType(): String {
+                    return "application/json"
                 }
             }
-        }
+        queue!!.add(stringRequest)
     }
 
-    fun setupView() {
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val intentType = intent.getIntExtra("intent_type", 0)
-        when (intentType) {
-            Constant.TYPE_UPDATE -> {
-                getUser()
+    private fun updateUser(id: Long) {
+        setLoading(true)
+
+        val user = User1(
+            etEditUsername!!.text.toString(),
+            etEditPassword!!.text.toString(),
+            etEditEmail!!.text.toString(),
+            etEditTanggal!!.text.toString(),
+            etEditTelepon!!.text.toString()
+        )
+
+        val stringRequest: StringRequest = object :
+            StringRequest(Method.PUT, UserApi.UPDATE_URL + id, Response.Listener { response ->
+                val gson = Gson()
+
+                var user = gson.fromJson(response, User1::class.java)
+
+                if(user != null)
+                    Toast.makeText(this@EditProfileActivity, "Data berhasil diupdate", Toast.LENGTH_SHORT).show()
+
+                val returnIntent = Intent()
+                setResult(RESULT_OK, returnIntent)
+                finish()
+
+                setLoading(false)
+            }, Response.ErrorListener { error ->
+                setLoading(false)
+                try {
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        this@EditProfileActivity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (e: Exception) {
+                    Toast.makeText(this@EditProfileActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                return headers
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getBody(): ByteArray {
+                val gson = Gson()
+                val requestBody = gson.toJson(user)
+                return requestBody.toByteArray(StandardCharsets.UTF_8)
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json"
             }
         }
+        queue!!.add(stringRequest)
     }
 
-    fun getUser(){
-        dataUser = intent.getIntExtra("intent_id", 0)
-        CoroutineScope(Dispatchers.Main).launch {
-            val user = dbUser.userDao().getUser(dataUser)[0]
-            binding.editEmail.editText?.setText(user.email)
-            binding.editUsername.editText?.setText(user.username)
-            binding.editTelepon.editText?.setText(user.telepon)
-            binding.editTanggal.editText?.setText(user.tanggalLahir)
-            tempId = user.id
-            tempPassword = user.password
+    private fun setLoading(isLoading: Boolean) {
+        if(isLoading) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            layoutLoading!!.visibility = View.VISIBLE
+        }else{
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            layoutLoading!!.visibility = View.INVISIBLE
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
     }
 }
