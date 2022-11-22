@@ -2,7 +2,7 @@ package com.william.etanodv2.api
 
 class FundraisingApi {
     companion object {
-        val BASE_URL = "https://637791e00992902a250bd160.mockapi.io/api/"
+        val BASE_URL = "192.168.0.107/ci4-apiserver/public/"
 
         val GET_ALL_URL = BASE_URL + "fundraising/"
         val GET_BY_ID_URL = BASE_URL + "fundraising/"

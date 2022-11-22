@@ -74,7 +74,8 @@ class FundraisingActivity : AppCompatActivity() {
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, FundraisingApi.GET_ALL_URL, Response.Listener { response ->
                 val gson = Gson()
-                var fundraising: Array<Fundraising> = gson.fromJson(response, Array<Fundraising>::class.java)
+                val jsonObject = JSONObject(response)
+                var fundraising: Array<Fundraising> = gson.fromJson(jsonObject.getJSONArray("data").toString(), Array<Fundraising>::class.java)
 
                 adapter!!.setFundraisingList(fundraising)
                 adapter!!.filter.filter(svFundraising!!.query)

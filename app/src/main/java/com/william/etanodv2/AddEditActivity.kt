@@ -71,7 +71,10 @@ class AddEditActivity : AppCompatActivity() {
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, FundraisingApi.GET_BY_ID_URL + id, Response.Listener { response ->
                 val gson = Gson()
-                val fundraising = gson.fromJson(response, Fundraising::class.java)
+
+                val jsonObject = JSONObject(response)
+
+                val fundraising = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), Fundraising::class.java)
 
                 etJudul!!.setText(fundraising.judul)
                 etDana!!.setText(fundraising.dana)
@@ -120,7 +123,8 @@ class AddEditActivity : AppCompatActivity() {
         val stringRequest: StringRequest =
             object : StringRequest(Method.POST, FundraisingApi.ADD_URL, Response.Listener { response ->
                 val gson = Gson()
-                var fundraising = gson.fromJson(response, Fundraising::class.java)
+                val jsonObject = JSONObject(response)
+                val fundraising = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), Fundraising::class.java)
 
                 if(fundraising != null)
                     Toast.makeText(this@AddEditActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
@@ -151,15 +155,13 @@ class AddEditActivity : AppCompatActivity() {
                     return headers
                 }
 
-                @Throws(AuthFailureError::class)
-                override fun getBody(): ByteArray {
-                    val gson = Gson()
-                    val requestBody = gson.toJson(fundraising)
-                    return requestBody.toByteArray(StandardCharsets.UTF_8)
-                }
-
-                override fun getBodyContentType(): String {
-                    return "application/json"
+                override fun getParams(): MutableMap<String, String>? {
+                    val params = HashMap<String, String>()
+                    params["judul"] = fundraising.judul
+                    params["dana"] = fundraising.dana
+                    params["lokasi"] = fundraising.lokasi
+                    params["durasi"] = fundraising.durasi
+                    return params
                 }
             }
         queue!!.add(stringRequest)
@@ -210,15 +212,13 @@ class AddEditActivity : AppCompatActivity() {
                 return headers
             }
 
-            @Throws(AuthFailureError::class)
-            override fun getBody(): ByteArray {
-                val gson = Gson()
-                val requestBody = gson.toJson(fundraising)
-                return requestBody.toByteArray(StandardCharsets.UTF_8)
-            }
-
-            override fun getBodyContentType(): String {
-                return "application/json"
+            override fun getParams(): MutableMap<String, String>? {
+                val params = HashMap<String, String>()
+                params["judul"] = fundraising.judul
+                params["dana"] = fundraising.dana
+                params["lokasi"] = fundraising.lokasi
+                params["durasi"] = fundraising.durasi
+                return params
             }
         }
         queue!!.add(stringRequest)
