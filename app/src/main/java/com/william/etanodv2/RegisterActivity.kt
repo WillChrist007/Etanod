@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.william.etanodv2.api.UserApi
 import com.william.etanodv2.databinding.ActivityRegisterBinding
+import com.william.etanodv2.models.Fundraising
 import com.william.etanodv2.models.User1
 import com.william.etanodv2.notification.NotificationReceiver
 import com.william.etanodv2.room.users.User
@@ -40,7 +41,7 @@ import java.util.*
 class RegisterActivity : AppCompatActivity() {
     var kalender = Calendar.getInstance()
 
-    //val dbUser by lazy { UserDB(this) }
+    val dbUser by lazy { UserDB(this) }
 
     private lateinit var binding: ActivityRegisterBinding
 
@@ -148,7 +149,7 @@ class RegisterActivity : AppCompatActivity() {
             if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12){
                 checkRegister = true
 
-                /*CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     dbUser.userDao().addUser(
                         User(
                             0,
@@ -160,7 +161,7 @@ class RegisterActivity : AppCompatActivity() {
                         )
                     )
                     finish()
-                }*/
+                }
 
                 var strUserName: String = binding.username.editText?.text.toString().trim()
                 var strPass: String = binding.password.editText?.text.toString().trim()
@@ -194,8 +195,8 @@ class RegisterActivity : AppCompatActivity() {
 
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.createNotificationChannel(channel1)
-                notificationManager.createNotificationChannel(channel2)
+            notificationManager.createNotificationChannel(channel1)
+            notificationManager.createNotificationChannel(channel2)
         }
     }
 
@@ -217,7 +218,7 @@ class RegisterActivity : AppCompatActivity() {
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setStyle(
                 NotificationCompat.BigPictureStyle()
-                .bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.etanod)))
+                    .bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.etanod)))
             .setColor(Color.BLUE)
             .setAutoCancel(true)
             .setOnlyAlertOnce(true)
@@ -252,7 +253,8 @@ class RegisterActivity : AppCompatActivity() {
         val stringRequest: StringRequest =
             object : StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
                 val gson = Gson()
-                var user = gson.fromJson(response, User1::class.java)
+                val jsonObject = JSONObject(response)
+                val user = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), User1::class.java)
 
                 if(user != null)
                     Toast.makeText(this@RegisterActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
@@ -282,15 +284,14 @@ class RegisterActivity : AppCompatActivity() {
                     return headers
                 }
 
-                @Throws(AuthFailureError::class)
-                override fun getBody(): ByteArray {
-                    val gson = Gson()
-                    val requestBody = gson.toJson(user)
-                    return requestBody.toByteArray(StandardCharsets.UTF_8)
-                }
-
-                override fun getBodyContentType(): String {
-                    return "application/json"
+                override fun getParams(): MutableMap<String, String>? {
+                    val params = HashMap<String, String>()
+                    params["username"] = user.username
+                    params["password"] = user.password
+                    params["email"] = user.email
+                    params["tanggalLahir"] = user.tanggalLahir
+                    params["telepon"] = user.telepon
+                    return params
                 }
             }
         queue!!.add(stringRequest)

@@ -13,6 +13,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.william.etanodv2.api.UserApi
+import com.william.etanodv2.models.Fundraising
 import com.william.etanodv2.models.User1
 import com.william.etanodv2.room.users.User
 import com.william.etanodv2.room.users.UserDB
@@ -74,7 +75,8 @@ class EditProfileActivity : AppCompatActivity() {
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, UserApi.GET_BY_ID_URL + id, Response.Listener { response ->
                 val gson = Gson()
-                val user = gson.fromJson(response, User1::class.java)
+                val jsonObject = JSONObject(response)
+                val user = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), User1::class.java)
 
                 etEditUsername!!.setText(user.username)
                 etEditPassword!!.setText(user.password)
@@ -123,7 +125,8 @@ class EditProfileActivity : AppCompatActivity() {
         val stringRequest: StringRequest =
             object : StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
                 val gson = Gson()
-                var user = gson.fromJson(response, User1::class.java)
+                val jsonObject = JSONObject(response)
+                val user = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), User1::class.java)
 
                 if(user != null)
                     Toast.makeText(this@EditProfileActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
@@ -154,15 +157,14 @@ class EditProfileActivity : AppCompatActivity() {
                     return headers
                 }
 
-                @Throws(AuthFailureError::class)
-                override fun getBody(): ByteArray {
-                    val gson = Gson()
-                    val requestBody = gson.toJson(user)
-                    return requestBody.toByteArray(StandardCharsets.UTF_8)
-                }
-
-                override fun getBodyContentType(): String {
-                    return "application/json"
+                override fun getParams(): MutableMap<String, String>? {
+                    val params = HashMap<String, String>()
+                    params["username"] = user.username
+                    params["password"] = user.password
+                    params["email"] = user.email
+                    params["tanggalLahir"] = user.tanggalLahir
+                    params["telepon"] = user.telepon
+                    return params
                 }
             }
         queue!!.add(stringRequest)
@@ -214,15 +216,14 @@ class EditProfileActivity : AppCompatActivity() {
                 return headers
             }
 
-            @Throws(AuthFailureError::class)
-            override fun getBody(): ByteArray {
-                val gson = Gson()
-                val requestBody = gson.toJson(user)
-                return requestBody.toByteArray(StandardCharsets.UTF_8)
-            }
-
-            override fun getBodyContentType(): String {
-                return "application/json"
+            override fun getParams(): MutableMap<String, String>? {
+                val params = HashMap<String, String>()
+                params["username"] = user.username
+                params["password"] = user.password
+                params["email"] = user.email
+                params["tanggalLahir"] = user.tanggalLahir
+                params["telepon"] = user.telepon
+                return params
             }
         }
         queue!!.add(stringRequest)
