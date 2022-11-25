@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.william.etanodv2.adapters.UserAdapter
 import com.william.etanodv2.api.UserApi
+import com.william.etanodv2.models.Fundraising
 import com.william.etanodv2.models.User1
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
@@ -68,7 +69,8 @@ class UserActivity : AppCompatActivity() {
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, UserApi.GET_ALL_URL, Response.Listener { response ->
                 val gson = Gson()
-                var user: Array<User1> = gson.fromJson(response, Array<User1>::class.java)
+                val jsonObject = JSONObject(response)
+                var user: Array<User1> = gson.fromJson(jsonObject.getJSONArray("data").toString(), Array<User1>::class.java)
 
                 adapter!!.setUserList(user)
                 adapter!!.filter.filter(svUser!!.query)

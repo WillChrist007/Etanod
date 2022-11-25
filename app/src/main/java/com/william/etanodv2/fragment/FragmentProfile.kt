@@ -60,13 +60,13 @@ class FragmentProfile : Fragment() {
             println("user id=" + userId)
             val resultCheckUser: List<User> = dbUser.userDao().getUser(userId)
             println("hasil=" + resultCheckUser)
-            viewUsername.setText("Username : " + resultCheckUser[0].username)
-            viewEmail.setText("Email : " + resultCheckUser[0].email)
-            viewTelepon.setText("Telepon : " + resultCheckUser[0].telepon)
+            //viewUsername.setText("Username : " + resultCheckUser[0].username)
+            //viewEmail.setText("Email : " + resultCheckUser[0].email)
+            //viewTelepon.setText("Telepon : " + resultCheckUser[0].telepon)
 
         }
 
-         val tempId = userId
+        val tempId = userId
 
         btnUpdate.setOnClickListener {
             startActivity(
