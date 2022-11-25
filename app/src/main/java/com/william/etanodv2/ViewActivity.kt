@@ -56,7 +56,10 @@ class ViewActivity : AppCompatActivity() {
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, FundraisingApi.GET_BY_ID_URL + id, Response.Listener { response ->
                 val gson = Gson()
-                val fundraising = gson.fromJson(response, Fundraising::class.java)
+
+                val jsonObject = JSONObject(response)
+
+                val fundraising = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), Fundraising::class.java)
 
                 etJudul!!.setText(fundraising.judul)
                 etDana!!.setText(fundraising.dana)

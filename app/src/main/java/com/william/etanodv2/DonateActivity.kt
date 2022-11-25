@@ -74,7 +74,8 @@ class DonateActivity : AppCompatActivity() {
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, FundraisingApi.GET_ALL_URL, Response.Listener { response ->
                 val gson = Gson()
-                var donate: Array<Fundraising> = gson.fromJson(response, Array<Fundraising>::class.java)
+                val jsonObject = JSONObject(response)
+                var donate: Array<Fundraising> = gson.fromJson(jsonObject.getJSONArray("data").toString(), Array<Fundraising>::class.java)
 
                 adapter!!.setDonateList(donate)
                 adapter!!.filter.filter(svDonate!!.query)
@@ -112,5 +113,19 @@ class DonateActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == LAUNCH_LOCATION_ACTIVITY && resultCode == RESULT_OK) allDonate()
+    }
+
+    // Fungsi ini digunakan menampilkan layout loading
+    private fun setLoading(isLoading: Boolean) {
+        if (isLoading) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            layoutLoading!!.visibility = View.VISIBLE
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            layoutLoading!!.visibility = View.INVISIBLE
+        }
     }
 }
