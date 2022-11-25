@@ -1,26 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".ScanQRActivity">
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/FLCamera"/>
 
-    <ImageView
-        android:layout_width="268dp"
-        android:layout_height="281dp"
-        android:layout_gravity="center"
-        android:background="@drawable/ic_baseline_frame_scanner" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imgClose"
-        android:layout_gravity="center|bottom"
-        android:background="@drawable/ic_baseline_close"/>
-</FrameLayout>
+        <TextView
+            android:text="QR Code Scanner"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Headline"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cameraBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kamera"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/galleryBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gallery"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/etanod"
+            android:adjustViewBounds="true"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/scanBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan Result"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:text="Result : "/>
+
+        <TextView
+            android:id="@+id/resultView"
+            android:textAlignment="viewStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</ScrollView>
