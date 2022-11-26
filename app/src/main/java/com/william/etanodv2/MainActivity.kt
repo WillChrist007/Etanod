@@ -24,5 +24,9 @@ class MainActivity : AppCompatActivity() {
         binding?.btnRegister?.setOnClickListener {
             startActivity(Intent(this@MainActivity, RegisterActivity::class.java))
         }
+
+        binding?.btnTAC?.setOnClickListener {
+            startActivity(Intent(this@MainActivity, TermConditionActivity::class.java))
+        }
     }
 }
