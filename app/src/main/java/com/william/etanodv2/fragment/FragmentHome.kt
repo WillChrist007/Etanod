@@ -34,5 +34,10 @@ class FragmentHome : Fragment() {
                 Intent(requireActivity().applicationContext, FundraisingActivity::class.java)
             )
         }
+        etanodButton.setOnClickListener {
+            startActivity(
+                Intent(requireActivity().applicationContext, ImageSliderActivity::class.java)
+            )
+        }
     }
 }
