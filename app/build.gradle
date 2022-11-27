@@ -87,4 +87,7 @@ dependencies {
 
     // FancyToast
     implementation 'io.github.shashank02051997:FancyToast:2.0.2'
+
+    // Downloader
+    implementation 'com.github.alirezat775:downloader:1.0.2'
 }
