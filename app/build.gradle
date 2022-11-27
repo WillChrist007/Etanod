@@ -91,6 +91,6 @@ dependencies {
     // Downloader
     implementation 'com.github.alirezat775:downloader:1.0.2'
 
-    // Image Slider
-    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
+    //Fade and Shrink
+    implementation 'com.stone.vega.library:VegaLayoutManager:1.0.6'
 }
