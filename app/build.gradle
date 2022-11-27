@@ -90,7 +90,4 @@ dependencies {
 
     // Downloader
     implementation 'com.github.alirezat775:downloader:1.0.2'
-
-    //Fade and Shrink
-    implementation 'com.stone.vega.library:VegaLayoutManager:1.0.6'
 }
