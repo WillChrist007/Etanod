@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
+import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.adapters.UserAdapter
 import com.william.etanodv2.api.UserApi
 import com.william.etanodv2.models.Fundraising
@@ -77,9 +78,9 @@ class UserActivity : AppCompatActivity() {
                 srUser!!.isRefreshing = false
 
                 if (!user.isEmpty())
-                    Toast.makeText(this@UserActivity, "Data Berhasil Diambil!", Toast.LENGTH_SHORT).show()
+                    FancyToast.makeText(this@UserActivity, "Data Berhasil Diambil !", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, R.drawable.etanod, false).show()
                 else
-                    Toast.makeText(this@UserActivity, "Data Kosong!", Toast.LENGTH_SHORT).show()
+                    FancyToast.makeText(this@UserActivity, "Data Kosong !", FancyToast.LENGTH_LONG, FancyToast.WARNING, R.drawable.etanod, false).show()
             }, Response.ErrorListener { error ->
                 srUser!!.isRefreshing = false
                 try {

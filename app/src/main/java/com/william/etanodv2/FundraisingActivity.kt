@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
+import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.adapters.FundraisingAdapter
 import com.william.etanodv2.api.FundraisingApi
 import com.william.etanodv2.models.Fundraising
@@ -82,9 +83,9 @@ class FundraisingActivity : AppCompatActivity() {
                 srFundraising!!.isRefreshing = false
 
                 if (!fundraising.isEmpty())
-                    Toast.makeText(this@FundraisingActivity, "Data Berhasil Diambil!", Toast.LENGTH_SHORT).show()
+                    FancyToast.makeText(this@FundraisingActivity, "Data Berhasil Diambil !", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, R.drawable.etanod, false).show()
                 else
-                    Toast.makeText(this@FundraisingActivity, "Data Kosong!", Toast.LENGTH_SHORT).show()
+                    FancyToast.makeText(this@FundraisingActivity, "Data Kosong !", FancyToast.LENGTH_LONG, FancyToast.WARNING, R.drawable.etanod, false).show()
             }, Response.ErrorListener { error ->
                 srFundraising!!.isRefreshing = false
                 try {

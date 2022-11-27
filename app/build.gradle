@@ -84,4 +84,7 @@ dependencies {
     // Lottie Animation
     def lottieVersion = "5.2.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    // FancyToast
+    implementation 'io.github.shashank02051997:FancyToast:2.0.2'
 }

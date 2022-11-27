@@ -30,6 +30,7 @@ import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.property.HorizontalAlignment
 import com.itextpdf.layout.property.TextAlignment
+import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.api.FundraisingApi
 import com.william.etanodv2.models.Fundraising
 import org.json.JSONObject
@@ -87,7 +88,16 @@ class AddEditActivity : AppCompatActivity() {
             tvTitle.setText("Edit Fundraising")
             getFundraisingById(id)
 
-            btnSave.setOnClickListener {updateFundraising(id)}
+            btnSave.setOnClickListener {
+                updateFundraising(id)
+
+                val judul = etJudul!!.text.toString()
+                val dana = etDana!!.text.toString()
+                val lokasi = edLokasi!!.text.toString()
+                val durasi = etDurasi!!.text.toString()
+
+                createPdf(judul, dana, lokasi, durasi)
+            }
         }
 
     }
@@ -338,6 +348,6 @@ class AddEditActivity : AppCompatActivity() {
         document.add(qrCodeImage)
 
         document.close()
-        Toast.makeText(this, "PDF Created", Toast.LENGTH_SHORT).show()
+        FancyToast.makeText(this, "PDF Created !", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, R.drawable.etanod, false).show()
     }
 }
