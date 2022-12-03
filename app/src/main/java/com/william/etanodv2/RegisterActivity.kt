@@ -23,6 +23,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.api.UserApi
 import com.william.etanodv2.databinding.ActivityRegisterBinding
 import com.william.etanodv2.models.Fundraising
@@ -50,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
     private var etEmail: EditText? = null
     private var etTanggal: EditText? = null
     private var etTelepon: EditText? = null
-//    private var layoutLoading: LinearLayout? = null
+    private var layoutLoading: LinearLayout? = null
 
     private val myPreference = "myPref"
     private val usernameK = "usernameKey"
@@ -106,9 +107,7 @@ class RegisterActivity : AppCompatActivity() {
             etEmail = findViewById(R.id.et_email)
             etTanggal = findViewById(R.id.etTanggal)
             etTelepon = findViewById(R.id.et_telepon)
-//            layoutLoading = findViewById(R.id.layout_loading)
-
-            createUser()
+            layoutLoading = findViewById(R.id.layout_loading)
 
             var checkRegister = false
 
@@ -119,40 +118,44 @@ class RegisterActivity : AppCompatActivity() {
             val inputTelepon: String = binding?.telepon?.getEditText()?.getText().toString()
 
             if(inputUsername.isEmpty()){
-                binding?.username?.setError("Username Tidak Boleh Kosong")
+                FancyToast.makeText(this@RegisterActivity, "Username Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 checkRegister = false
             }
 
-            if(inputPassword.isEmpty()){
-                binding?.password?.setError("Password Tidak Boleh Kosong")
+            else if(inputPassword.isEmpty()){
+                FancyToast.makeText(this@RegisterActivity, "Password Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 checkRegister = false
             }
 
-            if(inputEmail.isEmpty()){
-                binding?.email?.setError("Email Tidak Boleh Kosong")
+            else if(inputEmail.isEmpty()){
+                FancyToast.makeText(this@RegisterActivity, "Email Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 checkRegister = false
             }
 
-            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()){
-                binding?.email?.setError("Format Email Salah")
+            else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()){
+                FancyToast.makeText(this@RegisterActivity, "Format Email Salah !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 checkRegister = false
             }
 
-            if(inputTanggal.isEmpty()){
-                binding?.tanggalLahir?.setError("Tanggal Lahir Tidak Boleh Kosong")
+            else if(inputTanggal.isEmpty()){
+                FancyToast.makeText(this@RegisterActivity, "Tanggal Lahir Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 checkRegister = false
             }
 
-            if(inputTelepon.isEmpty()){
-                binding?.telepon?.setError("Nomor Telepon Tidak Boleh Kosong")
-                checkRegister = false
-            }else if(inputTelepon.length < 12){
-                binding?.telepon?.setError("Nomor Telepon TIdak Valid")
+            else if(inputTelepon.isEmpty()){
+                FancyToast.makeText(this@RegisterActivity, "Nomor Telepon Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 checkRegister = false
             }
 
-            if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12){
+            else if(inputTelepon.length < 12){
+                FancyToast.makeText(this@RegisterActivity, "Nomor Telepon Tidak Valid !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
+                checkRegister = false
+            }
+
+            else if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12){
                 checkRegister = true
+
+                createUser()
 
                 CoroutineScope(Dispatchers.IO).launch {
                     dbUser.userDao().addUser(
@@ -245,7 +248,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun createUser(){
-//        setLoading(true)
+        setLoading(true)
 
         val user = User1(
             etUsername!!.text.toString(),
@@ -267,9 +270,9 @@ class RegisterActivity : AppCompatActivity() {
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
                 finish()
-//                setLoading(false)
+                setLoading(false)
             }, Response.ErrorListener { error ->
-//                setLoading(false)
+                setLoading(false)
                 try {
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
@@ -302,16 +305,16 @@ class RegisterActivity : AppCompatActivity() {
         queue!!.add(stringRequest)
     }
 
-//    private fun setLoading(isLoading: Boolean) {
-//        if(isLoading) {
-//            window.setFlags(
-//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-//            )
-//            layoutLoading!!.visibility = View.VISIBLE
-//        }else{
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-//            layoutLoading!!.visibility = View.INVISIBLE
-//        }
-//    }
+    private fun setLoading(isLoading: Boolean) {
+        if(isLoading) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            layoutLoading!!.visibility = View.VISIBLE
+        }else{
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            layoutLoading!!.visibility = View.INVISIBLE
+        }
+    }
 }

@@ -75,14 +75,24 @@ class AddEditActivity : AppCompatActivity() {
         if(id==-1L) {
             tvTitle.setText("Tambah Fundraising")
             btnSave.setOnClickListener {
-                createFundraising()
+                if(etJudul!!.text.toString().isEmpty()){
+                    FancyToast.makeText(this@AddEditActivity, "Judul Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
+                }else if (etDana!!.text.toString().isEmpty()){
+                    FancyToast.makeText(this@AddEditActivity, "Dana Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
+                }else if(edLokasi!!.text.toString().isEmpty()){
+                    FancyToast.makeText(this@AddEditActivity, "Lokasi Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
+                }else if(etDurasi!!.text.toString().isEmpty()){
+                    FancyToast.makeText(this@AddEditActivity, "Durasi Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
+                }else{
+                    createFundraising()
 
-                val judul = etJudul!!.text.toString()
-                val dana = etDana!!.text.toString()
-                val lokasi = edLokasi!!.text.toString()
-                val durasi = etDurasi!!.text.toString()
+                    val judul = etJudul!!.text.toString()
+                    val dana = etDana!!.text.toString()
+                    val lokasi = edLokasi!!.text.toString()
+                    val durasi = etDurasi!!.text.toString()
 
-                createPdf(judul, dana, lokasi, durasi)
+                    createPdf(judul, dana, lokasi, durasi)
+                }
             }
         } else {
             tvTitle.setText("Edit Fundraising")

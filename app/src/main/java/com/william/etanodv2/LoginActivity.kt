@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.room.users.User
 import com.william.etanodv2.room.users.UserDB
 import kotlinx.coroutines.CoroutineScope
@@ -54,45 +55,45 @@ class LoginActivity : AppCompatActivity() {
             val password: String = inputPassword.getEditText()?.getText().toString()
 
             if(username.isEmpty()){
-                inputUsername.setError("Username Tidak Boleh Kosong")
+                FancyToast.makeText(this@LoginActivity, "Username Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 cekLogin = false
             }
 
-            if(password.isEmpty()){
-                inputPassword.setError("Password Tidak Boleh Kosong")
+            else if(password.isEmpty()){
+                FancyToast.makeText(this@LoginActivity, "Password Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
                 cekLogin = false
             }
 
-            if(username == "admin" && password == "admin") {
+            else if(username == "admin" && password == "admin") {
                 val intent=Intent(this@LoginActivity, UserActivity::class.java)
                 startActivity(intent)
             }
 
-            CoroutineScope(Dispatchers.IO).launch {
-                var resultCheckUser: List<User> = dbUser.userDao().checkUser(username,password)
-                println("hasil: " + resultCheckUser)
+            else if(!username.isEmpty() && !password.isEmpty()){
+                CoroutineScope(Dispatchers.IO).launch {
+                    var resultCheckUser: List<User> = dbUser.userDao().checkUser(username,password)
+                    println("hasil: " + resultCheckUser)
 
-                if(resultCheckUser.isNullOrEmpty()){
-                    Snackbar.make(mainLayout,"Username atau Password Salah!", Snackbar.LENGTH_LONG).show()
-                    return@launch
+                    if(resultCheckUser.isNullOrEmpty()){
+                        FancyToast.makeText(this@LoginActivity, "Username atau Password Salah !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
+                        return@launch
+                    }
+
+                    else if(resultCheckUser[0].username.equals(username) && resultCheckUser[0].password.equals(password)){
+                        cekLogin=true
+                        val intent=Intent(this@LoginActivity, HomeActivity::class.java)
+                        intent.putExtra("usernameLogin",username)
+                        intent.putExtra("idLogin",resultCheckUser[0].id)
+
+
+                        val editor: SharedPreferences.Editor= sharedPreferencesRegister!!.edit()
+                        editor.putString(usernameK,username)
+                        editor.putString(passwordK,password)
+                        editor.apply()
+
+                        startActivity(intent)
+                    }
                 }
-
-                if(resultCheckUser[0].username.equals(username) && resultCheckUser[0].password.equals(password)){
-                    cekLogin=true
-                    val intent=Intent(this@LoginActivity, HomeActivity::class.java)
-                    intent.putExtra("usernameLogin",username)
-                    intent.putExtra("idLogin",resultCheckUser[0].id)
-
-
-                    val editor: SharedPreferences.Editor= sharedPreferencesRegister!!.edit()
-                    editor.putString(usernameK,username)
-                    editor.putString(passwordK,password)
-                    editor.apply()
-
-                    startActivity(intent)
-                }
-
-
             }
         })
     }
