@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
     private var etEmail: EditText? = null
     private var etTanggal: EditText? = null
     private var etTelepon: EditText? = null
-    private var layoutLoading: LinearLayout? = null
+//    private var layoutLoading: LinearLayout? = null
 
     private val myPreference = "myPref"
     private val usernameK = "usernameKey"
@@ -106,7 +106,7 @@ class RegisterActivity : AppCompatActivity() {
             etEmail = findViewById(R.id.et_email)
             etTanggal = findViewById(R.id.etTanggal)
             etTelepon = findViewById(R.id.et_telepon)
-            layoutLoading = findViewById(R.id.layout_loading)
+//            layoutLoading = findViewById(R.id.layout_loading)
 
             createUser()
 
@@ -133,6 +133,11 @@ class RegisterActivity : AppCompatActivity() {
                 checkRegister = false
             }
 
+            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()){
+                binding?.email?.setError("Format Email Salah")
+                checkRegister = false
+            }
+
             if(inputTanggal.isEmpty()){
                 binding?.tanggalLahir?.setError("Tanggal Lahir Tidak Boleh Kosong")
                 checkRegister = false
@@ -146,7 +151,7 @@ class RegisterActivity : AppCompatActivity() {
                 checkRegister = false
             }
 
-            if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12){
+            if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12){
                 checkRegister = true
 
                 CoroutineScope(Dispatchers.IO).launch {
@@ -240,7 +245,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun createUser(){
-        setLoading(true)
+//        setLoading(true)
 
         val user = User1(
             etUsername!!.text.toString(),
@@ -262,9 +267,9 @@ class RegisterActivity : AppCompatActivity() {
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
                 finish()
-                setLoading(false)
+//                setLoading(false)
             }, Response.ErrorListener { error ->
-                setLoading(false)
+//                setLoading(false)
                 try {
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
@@ -297,16 +302,16 @@ class RegisterActivity : AppCompatActivity() {
         queue!!.add(stringRequest)
     }
 
-    private fun setLoading(isLoading: Boolean) {
-        if(isLoading) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-            )
-            layoutLoading!!.visibility = View.VISIBLE
-        }else{
-            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            layoutLoading!!.visibility = View.INVISIBLE
-        }
-    }
+//    private fun setLoading(isLoading: Boolean) {
+//        if(isLoading) {
+//            window.setFlags(
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+//            )
+//            layoutLoading!!.visibility = View.VISIBLE
+//        }else{
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//            layoutLoading!!.visibility = View.INVISIBLE
+//        }
+//    }
 }
