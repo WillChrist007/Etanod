@@ -3,6 +3,7 @@ package com.william.etanodv2
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -14,8 +15,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.*
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
 import org.junit.Test
@@ -23,28 +23,29 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class RegisterActivityTest {
+class AddEditActivityTest {
 
     @Rule
     @JvmField
-    var mActivityScenarioRule = ActivityScenarioRule(RegisterActivity::class.java)
+    var mActivityScenarioRule = ActivityScenarioRule(AddEditActivity::class.java)
 
     @Test
-    fun registerActivityTest() {
+    fun addEditActivityTest() {
         onView(isRoot()).perform(waitFor(3000))
         val materialButton = onView(
             allOf(
-                withId(R.id.btnRegistration), withText("Register"),
+                withId(R.id.btn_save), withText("Simpan"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.LayoutRegistrasi),
+                        withId(R.id.ll_button),
                         childAtPosition(
                             withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
+                            1
                         )
                     ),
-                    3
-                )
+                    1
+                ),
+                isDisplayed()
             )
         )
         materialButton.perform(click())
@@ -52,31 +53,30 @@ class RegisterActivityTest {
 
         val textInputEditText = onView(
             allOf(
-                withId(R.id.et_username),
+                withId(R.id.et_judul),
                 childAtPosition(
                     childAtPosition(
-                        withId(R.id.username),
+                        withId(R.id.layout_judul),
                         0
                     ),
                     0
                 )
             )
         )
-        textInputEditText.perform(scrollTo(), click())
         textInputEditText.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
 
         val materialButton2 = onView(
             allOf(
-                withId(R.id.btnRegistration), withText("Register"),
+                withId(R.id.btn_save), withText("Simpan"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.LayoutRegistrasi),
+                        withId(R.id.ll_button),
                         childAtPosition(
                             withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
+                            1
                         )
                     ),
-                    3
+                    1
                 ),
                 isDisplayed()
             )
@@ -86,95 +86,63 @@ class RegisterActivityTest {
 
         val textInputEditText2 = onView(
             allOf(
-                withId(R.id.et_password),
+                withId(R.id.et_dana),
                 childAtPosition(
                     childAtPosition(
-                        withId(R.id.password),
+                        withId(R.id.layout_dana),
                         0
                     ),
                     0
                 )
             )
         )
-        textInputEditText2.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
+        textInputEditText2.perform(scrollTo(), replaceText("1000"), closeSoftKeyboard())
 
         val materialButton3 = onView(
             allOf(
-                withId(R.id.btnRegistration), withText("Register"),
+                withId(R.id.btn_save), withText("Simpan"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.LayoutRegistrasi),
+                        withId(R.id.ll_button),
                         childAtPosition(
                             withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
+                            1
                         )
                     ),
-                    3
+                    1
                 ),
+                isDisplayed()
             )
         )
         materialButton3.perform(click())
         onView(isRoot()).perform(waitFor(3000))
 
-        val textInputEditText3a = onView(
-            allOf(
-                withId(R.id.et_email),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.email),
-                        0
-                    ),
-                    0
-                )
-            )
-        )
-        textInputEditText3a.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
-
-        val materialButton4a = onView(
-            allOf(
-                withId(R.id.btnRegistration), withText("Register"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.LayoutRegistrasi),
-                        childAtPosition(
-                            withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
-                        )
-                    ),
-                    3
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton4a.perform(click())
-        onView(isRoot()).perform(waitFor(3000))
-
         val textInputEditText3 = onView(
             allOf(
-                withId(R.id.et_email),
+                withId(R.id.ed_lokasi),
                 childAtPosition(
                     childAtPosition(
-                        withId(R.id.email),
+                        withId(R.id.layout_lokasi),
                         0
                     ),
                     0
                 )
             )
         )
-        textInputEditText3.perform(scrollTo(), replaceText("test@gmail.com"), closeSoftKeyboard())
+        textInputEditText3.perform(scrollTo(), replaceText("Jawa"), closeSoftKeyboard())
 
         val materialButton4 = onView(
             allOf(
-                withId(R.id.btnRegistration), withText("Register"),
+                withId(R.id.btn_save), withText("Simpan"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.LayoutRegistrasi),
+                        withId(R.id.ll_button),
                         childAtPosition(
                             withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
+                            1
                         )
                     ),
-                    3
+                    1
                 ),
                 isDisplayed()
             )
@@ -184,101 +152,35 @@ class RegisterActivityTest {
 
         val textInputEditText4 = onView(
             allOf(
-                withId(R.id.etTanggal),
+                withId(R.id.et_durasi),
                 childAtPosition(
                     childAtPosition(
-                        withId(R.id.tanggal_lahir),
+                        withId(R.id.layout_durasi),
                         0
                     ),
                     0
                 )
             )
         )
-        textInputEditText4.perform(scrollTo(), replaceText("01/02/2023"), closeSoftKeyboard())
+        textInputEditText4.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
 
         val materialButton5 = onView(
             allOf(
-                withId(R.id.btnRegistration), withText("Register"),
+                withId(R.id.btn_save), withText("Simpan"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.LayoutRegistrasi),
+                        withId(R.id.ll_button),
                         childAtPosition(
                             withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
+                            1
                         )
                     ),
-                    3
+                    1
                 ),
                 isDisplayed()
             )
         )
         materialButton5.perform(click())
-        onView(isRoot()).perform(waitFor(3000))
-
-        val textInputEditText5a = onView(
-            allOf(
-                withId(R.id.et_telepon),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.telepon),
-                        0
-                    ),
-                    0
-                )
-            )
-        )
-        textInputEditText5a.perform(scrollTo(), replaceText("123456789012"), closeSoftKeyboard())
-
-        val materialButton6a = onView(
-            allOf(
-                withId(R.id.btnRegistration), withText("Register"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.LayoutRegistrasi),
-                        childAtPosition(
-                            withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
-                        )
-                    ),
-                    3
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton6a.perform(click())
-        onView(isRoot()).perform(waitFor(3000))
-
-        val textInputEditText5 = onView(
-            allOf(
-                withId(R.id.et_telepon),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.telepon),
-                        0
-                    ),
-                    0
-                )
-            )
-        )
-        textInputEditText5.perform(scrollTo(), replaceText("123456789012"), closeSoftKeyboard())
-
-        val materialButton6 = onView(
-            allOf(
-                withId(R.id.btnRegistration), withText("Register"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.LayoutRegistrasi),
-                        childAtPosition(
-                            withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
-                        )
-                    ),
-                    3
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton6.perform(click())
         onView(isRoot()).perform(waitFor(3000))
     }
 

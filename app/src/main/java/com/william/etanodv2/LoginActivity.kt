@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
                     println("hasil: " + resultCheckUser)
 
                     if(resultCheckUser.isNullOrEmpty()){
-                        FancyToast.makeText(this@LoginActivity, "Username atau Password Salah !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
+                        Snackbar.make(mainLayout,"Username atau Password Salah!", Snackbar.LENGTH_LONG).show()
                         return@launch
                     }
 
