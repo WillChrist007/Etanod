@@ -1,6 +1,7 @@
 package com.william.etanodv2.room.users
 
 import androidx.room.*
+import com.william.etanodv2.models.User
 
 @Dao
 interface UserDao {

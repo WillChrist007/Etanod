@@ -26,10 +26,9 @@ import com.google.gson.Gson
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.api.UserApi
 import com.william.etanodv2.databinding.ActivityRegisterBinding
-import com.william.etanodv2.models.Fundraising
 import com.william.etanodv2.models.User1
 import com.william.etanodv2.notification.NotificationReceiver
-import com.william.etanodv2.room.users.User
+import com.william.etanodv2.models.User
 import com.william.etanodv2.room.users.UserDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -250,7 +249,8 @@ class RegisterActivity : AppCompatActivity() {
     private fun createUser(){
         setLoading(true)
 
-        val user = User1(
+        val user = User(
+            0,
             etUsername!!.text.toString(),
             etPassword!!.text.toString(),
             etEmail!!.text.toString(),
@@ -259,10 +259,9 @@ class RegisterActivity : AppCompatActivity() {
         )
 
         val stringRequest: StringRequest =
-            object : StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
+            object : StringRequest(Method.POST, UserApi.REGISTER_URL, Response.Listener { response ->
                 val gson = Gson()
-                val jsonObject = JSONObject(response)
-                val user = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), User1::class.java)
+                val respond = gson.fromJson(response, User::class.java)
 
                 if(user != null)
                     Toast.makeText(this@RegisterActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()

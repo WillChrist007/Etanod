@@ -13,9 +13,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.william.etanodv2.api.UserApi
-import com.william.etanodv2.models.Fundraising
 import com.william.etanodv2.models.User1
-import com.william.etanodv2.room.users.User
+import com.william.etanodv2.models.User
 import com.william.etanodv2.room.users.UserDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,8 +47,8 @@ class EditProfileActivity : AppCompatActivity() {
         layoutLoading = findViewById(R.id.layout_loading)
 
         val btnSave = findViewById<Button>(R.id.btnSave)
-        val id = intent.getLongExtra("id", -1)
-        if(id==-1L) {
+        val id = intent.getIntExtra("id", -1)
+        if(id==-1) {
             btnSave.setOnClickListener { createUser() }
         } else {
             getUserById(id)
@@ -70,7 +69,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun getUserById(id: Long) {
+    private fun getUserById(id: Int) {
         setLoading(true)
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, UserApi.GET_BY_ID_URL + id, Response.Listener { response ->
@@ -170,7 +169,7 @@ class EditProfileActivity : AppCompatActivity() {
         queue!!.add(stringRequest)
     }
 
-    private fun updateUser(id: Long) {
+    private fun updateUser(id: Int) {
         setLoading(true)
 
         val user = User1(

@@ -175,8 +175,7 @@ class AddEditActivity : AppCompatActivity() {
         val stringRequest: StringRequest =
             object : StringRequest(Method.POST, FundraisingApi.ADD_URL, Response.Listener { response ->
                 val gson = Gson()
-                val jsonObject = JSONObject(response)
-                val fundraising = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), Fundraising::class.java)
+                val respond = gson.fromJson(response, Fundraising::class.java)
 
                 if(fundraising != null)
                     Toast.makeText(this@AddEditActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()

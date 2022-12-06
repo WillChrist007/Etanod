@@ -2,7 +2,7 @@ package com.william.etanodv2.api
 
 class FundraisingApi {
     companion object {
-        val BASE_URL = "http://192.168.0.108/ci4-apiserver/public/"
+        val BASE_URL = "http://192.168.206.98/API_ETANOD/public/api/"
 
         val GET_ALL_URL = BASE_URL + "fundraising/"
         val GET_BY_ID_URL = BASE_URL + "fundraising/"
