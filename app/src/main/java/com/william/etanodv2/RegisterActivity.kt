@@ -26,7 +26,6 @@ import com.google.gson.Gson
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.api.UserApi
 import com.william.etanodv2.databinding.ActivityRegisterBinding
-import com.william.etanodv2.models.User1
 import com.william.etanodv2.notification.NotificationReceiver
 import com.william.etanodv2.models.User
 import com.william.etanodv2.room.users.UserDB
@@ -40,8 +39,6 @@ import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
     var kalender = Calendar.getInstance()
-
-    val dbUser by lazy { UserDB(this) }
 
     private lateinit var binding: ActivityRegisterBinding
 
@@ -109,78 +106,16 @@ class RegisterActivity : AppCompatActivity() {
             layoutLoading = findViewById(R.id.layout_loading)
 
             var checkRegister = false
+            createUser()
 
-            val inputUsername: String = binding?.username?.getEditText()?.getText().toString()
-            val inputPassword: String = binding?.password?.getEditText()?.getText().toString()
-            val inputEmail: String = binding?.email?.getEditText()?.getText().toString()
-            val inputTanggal: String = binding?.tanggalLahir?.getEditText()?.getText().toString()
-            val inputTelepon: String = binding?.telepon?.getEditText()?.getText().toString()
+            var strUserName: String = binding.username.editText?.text.toString().trim()
+            var strPass: String = binding.password.editText?.text.toString().trim()
+            val editor: SharedPreferences.Editor = sharedPreferencesRegister!!.edit()
+            editor.putString(usernameK, strUserName)
+            editor.putString(passwordK, strPass)
+            editor.apply()
 
-            if(inputUsername.isEmpty()){
-                FancyToast.makeText(this@RegisterActivity, "Username Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                checkRegister = false
-            }
-
-            else if(inputPassword.isEmpty()){
-                FancyToast.makeText(this@RegisterActivity, "Password Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                checkRegister = false
-            }
-
-            else if(inputEmail.isEmpty()){
-                FancyToast.makeText(this@RegisterActivity, "Email Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                checkRegister = false
-            }
-
-            else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()){
-                FancyToast.makeText(this@RegisterActivity, "Format Email Salah !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                checkRegister = false
-            }
-
-            else if(inputTanggal.isEmpty()){
-                FancyToast.makeText(this@RegisterActivity, "Tanggal Lahir Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                checkRegister = false
-            }
-
-            else if(inputTelepon.isEmpty()){
-                FancyToast.makeText(this@RegisterActivity, "Nomor Telepon Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                checkRegister = false
-            }
-
-            else if(inputTelepon.length < 12){
-                FancyToast.makeText(this@RegisterActivity, "Nomor Telepon Tidak Valid !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                checkRegister = false
-            }
-
-            else if(!inputUsername.isEmpty() && !inputPassword.isEmpty() && !inputEmail.isEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches() && !inputTanggal.isEmpty() && !inputTelepon.isEmpty() && inputTelepon.length >= 12){
-                checkRegister = true
-
-                createUser()
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    dbUser.userDao().addUser(
-                        User(
-                            0,
-                            inputUsername,
-                            inputPassword,
-                            inputEmail,
-                            inputTanggal,
-                            inputTelepon
-                        )
-                    )
-                    finish()
-                }
-
-                var strUserName: String = binding.username.editText?.text.toString().trim()
-                var strPass: String = binding.password.editText?.text.toString().trim()
-                val editor: SharedPreferences.Editor = sharedPreferencesRegister!!.edit()
-                editor.putString(usernameK, strUserName)
-                editor.putString(passwordK, strPass)
-                editor.apply()
-
-
-
-                sendNotificationSucessRegister()
-            }
+            sendNotificationSucessRegister()
 
             if(!checkRegister)return@OnClickListener
             startActivity(moveLogin)

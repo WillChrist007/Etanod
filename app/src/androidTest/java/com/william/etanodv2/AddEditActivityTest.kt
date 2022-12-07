@@ -3,7 +3,6 @@ package com.william.etanodv2
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -15,7 +14,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
 import org.junit.Test
@@ -96,7 +96,7 @@ class AddEditActivityTest {
                 )
             )
         )
-        textInputEditText2.perform(scrollTo(), replaceText("1000"), closeSoftKeyboard())
+        textInputEditText2.perform(scrollTo(), replaceText("10000"), closeSoftKeyboard())
 
         val materialButton3 = onView(
             allOf(
@@ -117,7 +117,7 @@ class AddEditActivityTest {
         materialButton3.perform(click())
         onView(isRoot()).perform(waitFor(3000))
 
-        val textInputEditText3 = onView(
+        val textInputEditText3a = onView(
             allOf(
                 withId(R.id.ed_lokasi),
                 childAtPosition(
@@ -129,7 +129,40 @@ class AddEditActivityTest {
                 )
             )
         )
-        textInputEditText3.perform(scrollTo(), replaceText("Jawa"), closeSoftKeyboard())
+        textInputEditText3a.perform(scrollTo(), replaceText("Jawa"), closeSoftKeyboard())
+
+        val materialButton4a = onView(
+            allOf(
+                withId(R.id.btn_save), withText("Simpan"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.ll_button),
+                        childAtPosition(
+                            withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            1
+                        )
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton4a.perform(click())
+        onView(isRoot()).perform(waitFor(3000))
+
+        val textInputEditText3 = onView(
+            allOf(
+                withId(R.id.et_durasi),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.layout_durasi),
+                        0
+                    ),
+                    0
+                )
+            )
+        )
+        textInputEditText3.perform(scrollTo(), replaceText("1 Bulan"), closeSoftKeyboard())
 
         val materialButton4 = onView(
             allOf(
@@ -148,39 +181,6 @@ class AddEditActivityTest {
             )
         )
         materialButton4.perform(click())
-        onView(isRoot()).perform(waitFor(3000))
-
-        val textInputEditText4 = onView(
-            allOf(
-                withId(R.id.et_durasi),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.layout_durasi),
-                        0
-                    ),
-                    0
-                )
-            )
-        )
-        textInputEditText4.perform(scrollTo(), replaceText("test"), closeSoftKeyboard())
-
-        val materialButton5 = onView(
-            allOf(
-                withId(R.id.btn_save), withText("Simpan"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.ll_button),
-                        childAtPosition(
-                            withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            1
-                        )
-                    ),
-                    1
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton5.perform(click())
         onView(isRoot()).perform(waitFor(3000))
     }
 

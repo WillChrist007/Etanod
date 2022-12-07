@@ -32,6 +32,8 @@ import com.itextpdf.layout.property.HorizontalAlignment
 import com.itextpdf.layout.property.TextAlignment
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.william.etanodv2.api.FundraisingApi
+import com.william.etanodv2.databinding.ActivityAddEditBinding
+import com.william.etanodv2.databinding.ActivityRegisterBinding
 import com.william.etanodv2.models.Fundraising
 import org.json.JSONObject
 import java.io.File
@@ -42,6 +44,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 class AddEditActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAddEditBinding
 
     companion object{
         private val LOKASI_LIST = arrayOf("Sumatera", "Jawa", "Kalimantan", "Sulawesi", "Bali", "Papua")
@@ -58,6 +61,9 @@ class AddEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit)
 
+        binding = ActivityAddEditBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         queue = Volley.newRequestQueue(this)
         etJudul = findViewById(R.id.et_judul)
         etDana = findViewById(R.id.et_dana)
@@ -69,36 +75,41 @@ class AddEditActivity : AppCompatActivity() {
 
         val btnCancel = findViewById<Button>(R.id.btn_cancel)
         btnCancel.setOnClickListener {finish()}
+
         val btnSave = findViewById<Button>(R.id.btn_save)
         val tvTitle = findViewById<TextView>(R.id.tv_tittle)
         val id = intent.getLongExtra("id", -1)
+
         if(id==-1L) {
             tvTitle.setText("Tambah Fundraising")
-            btnSave.setOnClickListener {
-                if(etJudul!!.text.toString().isEmpty()){
-                    FancyToast.makeText(this@AddEditActivity, "Judul Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                }else if (etDana!!.text.toString().isEmpty()){
-                    FancyToast.makeText(this@AddEditActivity, "Dana Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                }else if(edLokasi!!.text.toString().isEmpty()){
-                    FancyToast.makeText(this@AddEditActivity, "Lokasi Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                }else if(etDurasi!!.text.toString().isEmpty()){
-                    FancyToast.makeText(this@AddEditActivity, "Durasi Tidak Boleh Kosong !", FancyToast.LENGTH_LONG, FancyToast.ERROR, R.drawable.etanod, false).show()
-                }else{
-                    createFundraising()
 
-                    val judul = etJudul!!.text.toString()
-                    val dana = etDana!!.text.toString()
-                    val lokasi = edLokasi!!.text.toString()
-                    val durasi = etDurasi!!.text.toString()
+            btnSave.setOnClickListener(View.OnClickListener {
+                var checkAdd = false
 
-                    createPdf(judul, dana, lokasi, durasi)
+                createFundraising()
+
+                val judul = etJudul!!.text.toString()
+                val dana = etDana!!.text.toString()
+                val lokasi = edLokasi!!.text.toString()
+                val durasi = etDurasi!!.text.toString()
+
+                if(!judul.isEmpty() && !dana.isEmpty() && !lokasi.isEmpty() && !durasi.isEmpty()) {
+                    checkAdd = true
                 }
-            }
+
+                if(!checkAdd)return@OnClickListener
+
+                createPdf(judul, dana, lokasi, durasi)
+
+                startActivity(Intent(this@AddEditActivity , FundraisingActivity::class.java))
+            })
         } else {
             tvTitle.setText("Edit Fundraising")
             getFundraisingById(id)
 
-            btnSave.setOnClickListener {
+            btnSave.setOnClickListener(View.OnClickListener {
+                var checkEdit = false
+
                 updateFundraising(id)
 
                 val judul = etJudul!!.text.toString()
@@ -106,8 +117,16 @@ class AddEditActivity : AppCompatActivity() {
                 val lokasi = edLokasi!!.text.toString()
                 val durasi = etDurasi!!.text.toString()
 
+                if(!judul.isEmpty() && !dana.isEmpty() && !lokasi.isEmpty() && !durasi.isEmpty()) {
+                    checkEdit = true
+                }
+
+                if(!checkEdit)return@OnClickListener
+
                 createPdf(judul, dana, lokasi, durasi)
-            }
+
+                startActivity(Intent(this@AddEditActivity , FundraisingActivity::class.java))
+            })
         }
 
     }

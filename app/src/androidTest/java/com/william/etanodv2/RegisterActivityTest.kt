@@ -227,7 +227,7 @@ class RegisterActivityTest {
                 )
             )
         )
-        textInputEditText5a.perform(scrollTo(), replaceText("123456789012"), closeSoftKeyboard())
+        textInputEditText5a.perform(scrollTo(), replaceText("123"), closeSoftKeyboard())
 
         val materialButton6a = onView(
             allOf(
