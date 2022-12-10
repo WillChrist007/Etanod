@@ -13,7 +13,6 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.william.etanodv2.api.UserApi
-import com.william.etanodv2.models.User1
 import com.william.etanodv2.models.User
 import com.william.etanodv2.room.users.UserDB
 import kotlinx.coroutines.CoroutineScope
@@ -47,24 +46,13 @@ class EditProfileActivity : AppCompatActivity() {
         layoutLoading = findViewById(R.id.layout_loading)
 
         val btnSave = findViewById<Button>(R.id.btnSave)
-        val id = intent.getIntExtra("id", -1)
-        if(id==-1) {
-            btnSave.setOnClickListener { createUser() }
-        } else {
-            getUserById(id)
+        val sp = getSharedPreferences("user", 0)
+        val id : Int = sp.getInt("id", 0)
 
-            btnSave.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    dbUser.userDao().updateUser(
-                        User(
-                            id, etEditUsername.toString(), etEditPassword.toString(),
-                            etEditEmail.toString(), etEditTanggal.toString(),
-                            etEditTelepon.toString()
-                        )
-                    )
-                }
-                updateUser(id)
-            }
+        getUserById(id)
+
+        btnSave.setOnClickListener {
+            updateUser(id)
         }
 
     }
@@ -75,7 +63,7 @@ class EditProfileActivity : AppCompatActivity() {
             StringRequest(Method.GET, UserApi.GET_BY_ID_URL + id, Response.Listener { response ->
                 val gson = Gson()
                 val jsonObject = JSONObject(response)
-                val user = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), User1::class.java)
+                val user = gson.fromJson(jsonObject.getJSONObject("data").toString(), User::class.java)
 
                 etEditUsername!!.setText(user.username)
                 etEditPassword!!.setText(user.password)
@@ -110,69 +98,11 @@ class EditProfileActivity : AppCompatActivity() {
         queue!!.add(stringRequest)
     }
 
-    private fun createUser(){
-        setLoading(true)
-
-        val user = User1(
-            etEditUsername!!.text.toString(),
-            etEditPassword!!.text.toString(),
-            etEditEmail!!.text.toString(),
-            etEditTanggal!!.text.toString(),
-            etEditTelepon!!.text.toString()
-        )
-
-        val stringRequest: StringRequest =
-            object : StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
-                val gson = Gson()
-                val jsonObject = JSONObject(response)
-                val user = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), User1::class.java)
-
-                if(user != null)
-                    Toast.makeText(this@EditProfileActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
-
-                val returnIntent = Intent()
-                setResult(RESULT_OK, returnIntent)
-                finish()
-
-                setLoading(false)
-            }, Response.ErrorListener { error ->
-                setLoading(false)
-                try {
-                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
-                    val errors = JSONObject(responseBody)
-                    Toast.makeText(
-                        this@EditProfileActivity,
-                        errors.getString("message"),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } catch (e: Exception){
-                    Toast.makeText(this@EditProfileActivity, e.message, Toast.LENGTH_SHORT).show()
-                }
-            }) {
-                @Throws(AuthFailureError::class)
-                override fun getHeaders(): Map<String, String> {
-                    val headers = HashMap<String, String>()
-                    headers["Accept"] = "application/json"
-                    return headers
-                }
-
-                override fun getParams(): MutableMap<String, String>? {
-                    val params = HashMap<String, String>()
-                    params["username"] = user.username
-                    params["password"] = user.password
-                    params["email"] = user.email
-                    params["tanggalLahir"] = user.tanggalLahir
-                    params["telepon"] = user.telepon
-                    return params
-                }
-            }
-        queue!!.add(stringRequest)
-    }
-
     private fun updateUser(id: Int) {
         setLoading(true)
 
-        val user = User1(
+        val user = User(
+            id,
             etEditUsername!!.text.toString(),
             etEditPassword!!.text.toString(),
             etEditEmail!!.text.toString(),
@@ -184,7 +114,7 @@ class EditProfileActivity : AppCompatActivity() {
             StringRequest(Method.PUT, UserApi.UPDATE_URL + id, Response.Listener { response ->
                 val gson = Gson()
 
-                var user = gson.fromJson(response, User1::class.java)
+                var user = gson.fromJson(response, User::class.java)
 
                 if(user != null)
                     Toast.makeText(this@EditProfileActivity, "Data berhasil diupdate", Toast.LENGTH_SHORT).show()

@@ -88,6 +88,7 @@ class LoginActivity : AppCompatActivity() {
                 val gson = Gson()
                 val jsonObject = JSONObject(response)
                 Log.d("volleyerr",response.toString())
+
                 //val user = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), User::class.java)
 
                 if(user != null)

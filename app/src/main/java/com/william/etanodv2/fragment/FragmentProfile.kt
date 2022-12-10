@@ -10,9 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.william.etanodv2.EditProfileActivity
-import com.william.etanodv2.MainActivity
-import com.william.etanodv2.R
+import com.william.etanodv2.*
 import com.william.etanodv2.databinding.ActivityHomeBinding
 import com.william.etanodv2.models.User
 import com.william.etanodv2.room.users.UserDB
@@ -21,14 +19,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FragmentProfile : Fragment() {
-    val dbUser by lazy { UserDB(requireContext()) }
-
-    lateinit var viewUsername: TextView
-    lateinit var viewEmail: TextView
-    lateinit var viewTelepon: TextView
+    //val dbUser by lazy { UserDB(requireContext()) }
 
     lateinit var btnLogout:Button
-    lateinit var btnUpdate:Button
+    lateinit var btnView:Button
 
     var binding: ActivityHomeBinding? = null
 
@@ -43,32 +37,12 @@ class FragmentProfile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewUsername=view.findViewById(R.id.profileUsername)
-        viewEmail=view.findViewById(R.id.profileEmail)
-        viewTelepon=view.findViewById(R.id.profileTelepon)
-
-        btnUpdate=view.findViewById(R.id.btnEdit)
+        btnView=view.findViewById(R.id.btnView)
         btnLogout=view.findViewById(R.id.btnLogout)
 
-        val userId= requireActivity().intent.getIntExtra("idLogin",0)
-        CoroutineScope(Dispatchers.IO).launch{
-
-            println("user id=" + userId)
-            val resultCheckUser: List<User> = dbUser.userDao().getUser(userId)
-            println("hasil=" + resultCheckUser)
-            //viewUsername.setText("Username : " + resultCheckUser[0].username)
-            //viewEmail.setText("Email : " + resultCheckUser[0].email)
-            //viewTelepon.setText("Telepon : " + resultCheckUser[0].telepon)
-
-        }
-
-        val tempId = userId
-
-        btnUpdate.setOnClickListener {
+        btnView.setOnClickListener {
             startActivity(
                 Intent(requireActivity().applicationContext, EditProfileActivity::class.java)
-                    .putExtra("intent_id", tempId)
-                    .putExtra("intent_type", 2)
             )
         }
 

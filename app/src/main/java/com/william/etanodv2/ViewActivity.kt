@@ -93,7 +93,7 @@ class ViewActivity : AppCompatActivity() {
 
                 val jsonObject = JSONObject(response)
 
-                val fundraising = gson.fromJson(jsonObject.getJSONArray("data")[0].toString(), Fundraising::class.java)
+                val fundraising = gson.fromJson(jsonObject.getJSONObject("data").toString(), Fundraising::class.java)
 
                 etJudul!!.setText(fundraising.judul)
                 etDana!!.setText(fundraising.dana)
