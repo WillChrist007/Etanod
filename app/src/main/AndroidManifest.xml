@@ -38,7 +38,7 @@
         </activity>
         <activity
             android:name=".AddEditVolunteerActivity"
-            android:exported="false">
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -52,20 +52,6 @@
         </activity>
         <activity
             android:name=".VolunteerActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".openActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ViewProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
