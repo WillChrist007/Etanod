@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".ViewActivity">
+    tools:context=".AddEditVolunteerActivity">
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="Donasi Sekarang" />
+                android:text="Tambah Volunteer" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_judul"
@@ -37,97 +37,74 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:hint="Judul Fundraising">
+                android:hint="Judul Volunteer">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_judul"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:editable="false"/>
+                    android:inputType="textCapWords"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_dana"
+                android:id="@+id/layout_deskripsi"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:hint="Dana Yang Dibutuhkan" >
+                android:hint="Deskripsi" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_dana"
+                    android:id="@+id/et_deskripsi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:editable="false"/>
+                    android:inputType="textCapWords" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_lokasi"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
                 android:hint="Lokasi">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/ed_lokasi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:editable="false"/>
+                    android:inputType="none"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_durasi"
+                android:id="@+id/layout_waktu"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
-                android:hint="Durasi" >
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Waktu" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_durasi"
+                    android:id="@+id/et_waktu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:editable="false"/>
+                    android:editable="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_donasi"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="128dp"
-        android:hint="Donasi yang diberikan"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/scroll_view"
-        app:layout_constraintTop_toTopOf="@+id/scroll_view"
-        app:layout_constraintVertical_bias="1.0">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_donasi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/ll_button"
@@ -140,11 +117,18 @@
         app:layout_constraintStart_toStartOf="parent" >
 
         <Button
-            android:id="@+id/btn_donate"
+            android:id="@+id/btn_cancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="donasi sekarang" />
+            android:text="Batal" />
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Simpan" />
 
     </LinearLayout>
 

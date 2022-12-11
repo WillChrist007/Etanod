@@ -1,7 +1,6 @@
 package com.william.etanodv2
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -31,8 +30,8 @@ import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.property.HorizontalAlignment
 import com.itextpdf.layout.property.TextAlignment
 import com.shashank.sony.fancytoastlib.FancyToast
-import com.william.etanodv2.api.FundraisingApi
-import com.william.etanodv2.models.Fundraising
+import com.william.etanodv2.api.VolunteerApi
+import com.william.etanodv2.models.Volunteer
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -41,66 +40,65 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-class ViewActivity : AppCompatActivity() {
+class ViewVolunteerActivity : AppCompatActivity() {
 
     private var etJudul: EditText? = null
-    private var etDana: EditText? = null
+    private var etDeskripsi: EditText? = null
     private var edLokasi: EditText? = null
-    private var etDurasi: EditText? = null
-    private var etDonasi: EditText? = null
+    private var etWaktu: EditText? = null
     private var layoutLoading: LinearLayout? = null
     private var queue: RequestQueue? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view)
+        setContentView(R.layout.activity_view_volunteer)
 
         queue = Volley.newRequestQueue(this)
         etJudul = findViewById(R.id.et_judul)
-        etDana = findViewById(R.id.et_dana)
+        etDeskripsi = findViewById(R.id.et_deskripsi)
         edLokasi = findViewById(R.id.ed_lokasi)
-        etDurasi = findViewById(R.id.et_durasi)
-        etDonasi = findViewById(R.id.et_donasi)
+        etWaktu = findViewById(R.id.et_waktu)
         layoutLoading = findViewById(R.id.layout_loading)
 
 
-        val btnDonate = findViewById<Button>(R.id.btn_donate)
-        btnDonate.setOnClickListener {
+        val btnVolunteer = findViewById<Button>(R.id.btn_daftar)
+        btnVolunteer.setOnClickListener {
             val judul = etJudul!!.text.toString()
+            val deskripsi = etDeskripsi!!.text.toString()
             val lokasi = edLokasi!!.text.toString()
-            val donasi = etDonasi!!.text.toString()
+            val waktu = etWaktu!!.text.toString()
 
-            createPdf(judul, lokasi, donasi)
+            createPdf(judul, deskripsi, lokasi, waktu)
 
             finish()
         }
         val tvTitle = findViewById<TextView>(R.id.tv_tittle)
         val id = intent.getLongExtra("id", -1)
         if(id==-1L) {
-            tvTitle.setText("Tambah Fundraising")
+            tvTitle.setText("Tambah Volunteer")
         } else {
-            tvTitle.setText("Donasi Sekarang")
-            getFundraisingById(id)
+            tvTitle.setText("Daftar Volunteer")
+            getVolunteerById(id)
         }
 
     }
 
-    private fun getFundraisingById(id: Long) {
+    private fun getVolunteerById(id: Long) {
         setLoading(true)
         val stringRequest: StringRequest = object :
-            StringRequest(Method.GET, FundraisingApi.GET_BY_ID_URL + id, Response.Listener { response ->
+            StringRequest(Method.GET, VolunteerApi.GET_BY_ID_URL + id, Response.Listener { response ->
                 val gson = Gson()
 
                 val jsonObject = JSONObject(response)
 
-                val fundraising = gson.fromJson(jsonObject.getJSONObject("data").toString(), Fundraising::class.java)
+                val volunteer = gson.fromJson(jsonObject.getJSONObject("data").toString(), Volunteer::class.java)
 
-                etJudul!!.setText(fundraising.judul)
-                etDana!!.setText(fundraising.dana)
-                edLokasi!!.setText(fundraising.lokasi)
-                etDurasi!!.setText(fundraising.durasi)
+                etJudul!!.setText(volunteer.judul)
+                etDeskripsi!!.setText(volunteer.deskripsi)
+                edLokasi!!.setText(volunteer.lokasi)
+                etWaktu!!.setText(volunteer.waktu)
 
-                Toast.makeText(this@ViewActivity, "Data berhasil diambil!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ViewVolunteerActivity, "Data berhasil diambil!", Toast.LENGTH_SHORT).show()
                 setLoading(false)
             }, Response.ErrorListener { error ->
                 setLoading(false)
@@ -109,12 +107,12 @@ class ViewActivity : AppCompatActivity() {
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
                     Toast.makeText(
-                        this@ViewActivity,
+                        this@ViewVolunteerActivity,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 } catch (e: Exception) {
-                    Toast.makeText(this@ViewActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ViewVolunteerActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             }) {
             @Throws(AuthFailureError::class)
@@ -140,10 +138,10 @@ class ViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun createPdf(judul: String, lokasi: String, donasi: String){
+    private fun createPdf(judul: String, deskripsi: String, lokasi: String, waktu: String){
         //ini berguna untuk akses Writing ke storage HP dalam mode Download
         val pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
-        val file = File(pdfPath, "BUKTI BERDONASI " + judul + ".pdf")
+        val file = File(pdfPath, "BUKTI MENJADI RELAWAN " + judul + ".pdf")
         FileOutputStream(file)
 
         //inisisalisasi pembuatan PDF
@@ -161,12 +159,12 @@ class ViewActivity : AppCompatActivity() {
         val bitmapData = stream.toByteArray()
         val imageData = ImageDataFactory.create(bitmapData)
         val image = Image(imageData)
-        val namapengguna = Paragraph("Terima Kasih Telah Melakukan Donasi").setBold().setFontSize(24f)
+        val namapengguna = Paragraph("Terima Kasih Telah Menjadi Relawan").setBold().setFontSize(24f)
             .setTextAlignment(TextAlignment.CENTER)
         val group = Paragraph(
             """
                         Berikut Adalah
-                        Penggalangan Dana yang Telah Didonasi
+                        Kegiatan Volunteer yang Telah Diikuti
                         """.trimIndent()).setTextAlignment(TextAlignment.CENTER).setFontSize(12f)
 
         //proses pembuatan table
@@ -176,22 +174,25 @@ class ViewActivity : AppCompatActivity() {
         table.setHorizontalAlignment(HorizontalAlignment.CENTER)
         table.addCell(Cell().add(Paragraph("Judul")))
         table.addCell(Cell().add(Paragraph(judul)))
+        table.addCell(Cell().add(Paragraph("Deskripsi")))
+        table.addCell(Cell().add(Paragraph(deskripsi)))
         table.addCell(Cell().add(Paragraph("Lokasi")))
         table.addCell(Cell().add(Paragraph(lokasi)))
-        table.addCell(Cell().add(Paragraph("Donasi")))
-        table.addCell(Cell().add(Paragraph(donasi)))
+        table.addCell(Cell().add(Paragraph("Tanggal Pelaksanaan")))
+        table.addCell(Cell().add(Paragraph(waktu)))
         val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        table.addCell(Cell().add(Paragraph("Tanggal Donasi")))
+        table.addCell(Cell().add(Paragraph("Tanggal Mendaftar")))
         table.addCell(Cell().add(Paragraph(LocalDate.now().format(dateTimeFormatter))))
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss a")
-        table.addCell(Cell().add(Paragraph("Waktu Donasi")))
+        table.addCell(Cell().add(Paragraph("Waktu Mendaftar")))
         table.addCell(Cell().add(Paragraph(LocalTime.now().format(timeFormatter))))
 
         val barcodeQRCode = BarcodeQRCode(
             """
                                         $judul
+                                        $deskripsi
                                         $lokasi
-                                        $donasi
+                                        $waktu
                                         ${LocalDate.now().format(dateTimeFormatter)}
                                         ${LocalTime.now().format(timeFormatter)}
                                         """.trimIndent())

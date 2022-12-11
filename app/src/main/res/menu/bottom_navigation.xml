@@ -5,6 +5,10 @@
         android:title="Home"
         android:icon="@drawable/ic_home"/>
     <item
+        android:id="@+id/volunteer"
+        android:title="Volunteer"
+        android:icon="@drawable/ic_volunteer"/>
+    <item
         android:id="@+id/scanner"
         android:icon="@drawable/ic_baseline_qr_code_scanner_24"
         android:title="QR Scanner" />
